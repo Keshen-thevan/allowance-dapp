@@ -1,10 +1,8 @@
 
 
+contract address:0x1ebC8fb17d8E2659037dFCD73094F50Cc2148aCC;
 
-
-contract address: 0x1ebC8fb17d8E2659037dFCD73094F50Cc2148aCC
-
-contract ABI: [
+contract abi: [
 	{
 		"constant": false,
 		"inputs": [],
