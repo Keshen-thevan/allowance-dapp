@@ -1,6 +1,6 @@
 import './App.css';
 import Web3Modal from 'web3modal'
-import { providers, Contract, utils } from "ethers"
+import { providers, Contract, utils, ethers } from "ethers"
 import { useRef, useEffect, useState } from "react"
 import { contract_ABI, contract_ADDRESS } from '../src/constants'
 
@@ -10,6 +10,7 @@ function App() {
   const [walletConnected, setWalletConnected] = useState(false)
   const [user, setUser] = useState('')
   const [contractBalance, setContractBalance] = useState('')
+  const [accountBalance, setAccountBalance] = useState('')
 
   const getProviderOrSigner = async (needSigner = false) => {
     const provider = await web3ModalRef.current.connect();
@@ -18,7 +19,15 @@ function App() {
       method:"eth_requestAccounts"
     })
     setUser(accounts[0])
-    console.log("connected account: ", accounts[0])
+    //this gets the account of the current user
+    console.log("connected account: ", accounts[0]);
+    //get the balance of the connected account
+    const balance = await web3Provider.getBalance(accounts[0])
+    const number = balance / 10 ** 18
+    const userBalance = number.toFixed(4)
+    // const cheese = balance.toString()
+    console.log("balance", number)
+    setAccountBalance(userBalance)
 
     const { chainId } = await web3Provider.getNetwork();
     if (chainId !== 4) {
@@ -50,13 +59,18 @@ function App() {
       });
       connectWallet();
     }
-  }, [walletConnected]);
+  }, [walletConnected, user]);
 
   const getOwner = async() =>{
     const provider = await getProviderOrSigner();
     const walletContract = new Contract( contract_ADDRESS,contract_ABI, provider);
     const _owner = await walletContract.owner()
+    //returns the user set as the owner of the smart contract
     console.log("owner: ", _owner)
+    
+
+    //outputs the provider
+    console.log("provider: ", provider);
   } 
 
   const sendMoney = async() => {
@@ -71,11 +85,14 @@ function App() {
   }
 
   const getBalance = async() =>{
-    const provider = await getProviderOrSigner();
-    const walletContract = new Contract(contract_ADDRESS,contract_ABI,provider);
-    const tx = await walletContract.getBalance()
-    setContractBalance(tx)
-    console.log(tx)
+    try{
+      const provider = await getProviderOrSigner();
+      const walletContract = new Contract(contract_ADDRESS,contract_ABI,provider);
+      const tx = await walletContract.getBalance()
+      setContractBalance(tx)
+      console.log("tx: ",tx)
+
+    }catch(err){console.log(err)}
   }
 
 
@@ -91,6 +108,10 @@ function App() {
       </div> 
       
     }
+    <div className="accountBalance">
+      <p>accountBalance: {accountBalance}</p>
+      
+    </div>
 
     {contractBalance}
 
