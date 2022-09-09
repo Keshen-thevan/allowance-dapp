@@ -9,6 +9,7 @@ function App() {
   const web3ModalRef = useRef();
   const [walletConnected, setWalletConnected] = useState(false)
   const [user, setUser] = useState('')
+  const [contractBalance, setContractBalance] = useState('')
 
   const getProviderOrSigner = async (needSigner = false) => {
     const provider = await web3ModalRef.current.connect();
@@ -58,6 +59,25 @@ function App() {
     console.log("owner: ", _owner)
   } 
 
+  const sendMoney = async() => {
+    try {
+      const signer = await getProviderOrSigner(true);
+      const walletContract = new Contract(contract_ADDRESS, contract_ABI, signer);
+      const tx = await walletContract.sendMoney({value: utils.parseEther("0.001")})
+      await tx.wait()
+      window.alert("funds sent");
+
+    }catch(err){console.error(err)}
+  }
+
+  const getBalance = async() =>{
+    const provider = await getProviderOrSigner();
+    const walletContract = new Contract(contract_ADDRESS,contract_ABI,provider);
+    const tx = await walletContract.getBalance()
+    setContractBalance(tx)
+    console.log(tx)
+  }
+
 
 
 
@@ -72,9 +92,19 @@ function App() {
       
     }
 
+    {contractBalance}
+
 
       <div>
         <button onClick={getOwner} className="btn">Get Owner</button>
+      </div>
+
+      <div>
+        <button onClick={sendMoney} className="btn">Send Money</button>
+      </div>
+
+      <div>
+        <button onClick={getBalance} className="btn">getBalance</button>
       </div>
     </div>
   );

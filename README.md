@@ -10,3 +10,6 @@ install
 - allowance(_address)
 - getBalance() onlyOwner
 - owner()
+
+current problem
+- only owner can get balance of smart contract, but the balance on the frontend show it it all in lowercase and on smart contract it has uppercase
