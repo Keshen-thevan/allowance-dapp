@@ -17,7 +17,7 @@ function App() {
       method:"eth_requestAccounts"
     })
     setUser(accounts[0])
-    console.log(accounts[0])
+    console.log("connected account: ", accounts[0])
 
     const { chainId } = await web3Provider.getNetwork();
     if (chainId !== 4) {
@@ -36,7 +36,6 @@ function App() {
     try{
       await getProviderOrSigner()
       setWalletConnected(true)
-      console.log("connected wallet")
     }catch(err){console.error(err)}
   }
 
@@ -56,7 +55,7 @@ function App() {
     const provider = await getProviderOrSigner();
     const walletContract = new Contract( contract_ADDRESS,contract_ABI, provider);
     const _owner = await walletContract.owner()
-    console.log(_owner)
+    console.log("owner: ", _owner)
   } 
 
 
@@ -65,14 +64,17 @@ function App() {
 
   return (
     <div className="App">
-      <div>{user}</div>
+    
+      {walletConnected ? <div className="userOutput">{user}</div> :
       <div>
-        <button onClick={connectWallet}>Connect Wallet</button>
-      </div>
+        <button onClick={connectWallet} className="btn">Connect Wallet</button>
+      </div> 
+      
+    }
 
 
       <div>
-        <button onClick={getOwner}>Get Owner</button>
+        <button onClick={getOwner} className="btn">Get Owner</button>
       </div>
     </div>
   );
