@@ -11,10 +11,13 @@ function App() {
   const [user, setUser] = useState('')
   const [contractBalance, setContractBalance] = useState('')
   const [accountBalance, setAccountBalance] = useState('')
+  const [owner, setOwner] = useState(false)
+  const [ownerAddress, setOwnerAddress] = useState('')
 
   const getProviderOrSigner = async (needSigner = false) => {
     const provider = await web3ModalRef.current.connect();
     const web3Provider = new providers.Web3Provider(provider);
+
     const accounts = await window.ethereum.request({
       method:"eth_requestAccounts"
     })
@@ -23,10 +26,10 @@ function App() {
     console.log("connected account: ", accounts[0]);
     //get the balance of the connected account
     const balance = await web3Provider.getBalance(accounts[0])
+    //divides the number in wei to ether
     const number = balance / 10 ** 18
+    //sets the number to show 4 digits after the decimal
     const userBalance = number.toFixed(4)
-    // const cheese = balance.toString()
-    console.log("balance", number)
     setAccountBalance(userBalance)
 
     const { chainId } = await web3Provider.getNetwork();
@@ -39,6 +42,12 @@ function App() {
       const signer = web3Provider.getSigner();
       return signer;
     }
+
+    if(provider){
+      console.log("user Connected")
+      setWalletConnected(true)
+    }else{setWalletConnected(false)}
+
     return web3Provider;
   };
 
@@ -59,18 +68,18 @@ function App() {
       });
       connectWallet();
     }
-  }, [walletConnected, user]);
+  }, [walletConnected]);
+
 
   const getOwner = async() =>{
     const provider = await getProviderOrSigner();
     const walletContract = new Contract( contract_ADDRESS,contract_ABI, provider);
     const _owner = await walletContract.owner()
+    setOwner(true)
+    setOwnerAddress(_owner)
     //returns the user set as the owner of the smart contract
     console.log("owner: ", _owner)
-    
-
-    //outputs the provider
-    console.log("provider: ", provider);
+  
   } 
 
   const sendMoney = async() => {
@@ -89,8 +98,9 @@ function App() {
       const provider = await getProviderOrSigner();
       const walletContract = new Contract(contract_ADDRESS,contract_ABI,provider);
       const tx = await walletContract.getBalance()
-      setContractBalance(tx)
-      console.log("tx: ",tx)
+      const contractBalance = tx.toNumber()
+      setContractBalance(contractBalance)
+      console.log("tx: ",contractBalance)
 
     }catch(err){console.log(err)}
   }
@@ -113,7 +123,9 @@ function App() {
       
     </div>
 
-    {contractBalance}
+    <div>contract Balance: {contractBalance} wei</div>
+    
+    {owner ? <div className="ownerAddress">Owner: {ownerAddress}</div> : <div></div>}
 
 
       <div>
