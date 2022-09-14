@@ -73,7 +73,7 @@ function App() {
 
   const getOwner = async() =>{
     const provider = await getProviderOrSigner();
-    const walletContract = new Contract( contract_ADDRESS,contract_ABI, provider);
+    const walletContract = new Contract(contract_ADDRESS,contract_ABI, provider);
     const _owner = await walletContract.owner()
     setOwner(true)
     setOwnerAddress(_owner)
@@ -98,7 +98,6 @@ function App() {
       const signer = await getProviderOrSigner(true)
       const walletContract = new Contract(contract_ADDRESS, contract_ABI, signer)
       const tx = walletContract.withdrawOwner()
-      await tx.wait()
       window.alert("funds transfered")
     }catch(err){console.error(err)}
     
@@ -106,12 +105,12 @@ function App() {
 
   const getBalance = async() =>{
     try{
-      const provider = await getProviderOrSigner();
+      const provider = await getProviderOrSigner(true);
       const walletContract = new Contract(contract_ADDRESS,contract_ABI,provider);
       const tx = await walletContract.getBalance()
       const contractBalance = tx.toNumber()
       setContractBalance(contractBalance)
-      console.log("tx: ",contractBalance)
+      console.log("contractBalance: ",contractBalance)
 
     }catch(err){console.log(err)}
   }

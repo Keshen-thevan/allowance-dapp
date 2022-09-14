@@ -20,7 +20,7 @@ install
 - use the .toNumber() method to convert a big Number from a smart contract and changes it to a readable number for javascript to work with
 
 ## next thing to add
-- the next function that needs to be added is a withdraw function
+- i want to be able to set the amount of eth i want to be able to send to the contract
 
 ## Problems
 1. only owner can get balance of smart contract, but the balance on the frontend show it it all in lowercase and on smart contract it has uppercase
