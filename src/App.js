@@ -103,6 +103,17 @@ function App() {
     
   }
 
+  const withdraw = async() => {
+    //the function needs a variable for the amount the user wants to send
+    //need to create a input to get the amount
+    const amount = document.getElementById("amountInput").value
+    const signer = await getProviderOrSigner(true)
+    const walletContract = new Contract(contract_ADDRESS, contract_ABI,signer)
+    const tx = await walletContract.withdraw(amount)
+    console.log(amount)
+    
+  }
+
   const getBalance = async() =>{
     try{
       const provider = await getProviderOrSigner(true);
@@ -113,6 +124,12 @@ function App() {
       console.log("contractBalance: ",contractBalance)
 
     }catch(err){console.log(err)}
+  }
+
+  const setAllowance = async() =>{
+    //need this contract to allow users ot withdraw funds
+    //takes in two parameters, an address and an amount
+    
   }
 
 
@@ -137,6 +154,12 @@ function App() {
     
     {owner ? <div className="ownerAddress">Owner: {ownerAddress}</div> : <div></div>}
 
+
+    <div className="accountBalance">
+      <label for="name">Amount: </label>
+      <input type="number" id="amountInput" name="name" />
+      <button onClick={withdraw} className="btn">withdraw</button>
+    </div>
 
       <div>
         <button onClick={getOwner} className="btn">Get Owner</button>
