@@ -14,7 +14,7 @@ install
 - owner() <done>
 
 ## latest additions:
-- the last thing i added was having the getBalance function return the balance of the smart contract
+- the last thing i added was the owner withdraw.
 
 ## Things I learnt:
 - use the .toNumber() method to convert a big Number from a smart contract and changes it to a readable number for javascript to work with

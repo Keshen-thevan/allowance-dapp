@@ -93,6 +93,17 @@ function App() {
     }catch(err){console.error(err)}
   }
 
+  const ownerWithdraw = async() =>{
+    try{
+      const signer = await getProviderOrSigner(true)
+      const walletContract = new Contract(contract_ADDRESS, contract_ABI, signer)
+      const tx = walletContract.withdrawOwner()
+      await tx.wait()
+      window.alert("funds transfered")
+    }catch(err){console.error(err)}
+    
+  }
+
   const getBalance = async() =>{
     try{
       const provider = await getProviderOrSigner();
@@ -130,6 +141,9 @@ function App() {
 
       <div>
         <button onClick={getOwner} className="btn">Get Owner</button>
+      </div>
+      <div>
+        <button onClick={ownerWithdraw} className="btn">Owner Withdraw</button>
       </div>
 
       <div>
