@@ -84,9 +84,11 @@ function App() {
 
   const sendMoney = async() => {
     try {
+      //need to get the value to send to the contract
+      const sendMoneyAmount = document.getElementById("sendMoneyInput").value
       const signer = await getProviderOrSigner(true);
       const walletContract = new Contract(contract_ADDRESS, contract_ABI, signer);
-      const tx = await walletContract.sendMoney({value: utils.parseEther("0.001")})
+      const tx = await walletContract.sendMoney({value: sendMoneyAmount})
       await tx.wait()
       window.alert("funds sent");
 
@@ -98,7 +100,7 @@ function App() {
       const signer = await getProviderOrSigner(true)
       const walletContract = new Contract(contract_ADDRESS, contract_ABI, signer)
       const tx = walletContract.withdrawOwner()
-      window.alert("funds transfered")
+      await window.alert("funds transfered")
     }catch(err){console.error(err)}
     
   }
@@ -159,8 +161,8 @@ function App() {
     
     {owner ? <div className="ownerAddress">Owner: {ownerAddress}</div> : <div></div>}
       <div>
-        <button onClick={ownerWithdraw} className="btn">Owner Withdraw</button>
-        <button onClick={getOwner} className="btn">Get Owner</button>
+        <button onClick={ownerWithdraw} className="btn">ownerWithdraw</button>
+        <button onClick={getOwner} className="btn">getOwner</button>
         <button onClick={getBalance} className="btn">getBalance</button>
       </div>
 
@@ -168,13 +170,17 @@ function App() {
     
 <div className="allInputs">
 
-    <div className="accountBalance container">
+    <div className="withdraw container">
+      <h3>Withdraw</h3>
       <label for="name">Amount: </label>
       <input type="number" id="amountInput" name="name" />
-      <button onClick={withdraw} className="btn">withdraw</button>
+      <div>
+        <button onClick={withdraw} className="btn">withdraw</button>
+      </div>
     </div>
 
     <div className="setAllowance container">
+      <h3>Set Allowance</h3>
       <label for="setAllowanceAddress">SetAllowanceAddress: </label>
       <input type="text" id="setAllowanceAddress" name="setAllowanceAddress"/>
 
@@ -188,10 +194,11 @@ function App() {
 </div>
 
       <div className="container">
-        <label for="sendMoneyInput">Set Amount to send: </label>
+        <h3>Send Money</h3>
+        <label for="sendMoneyInput">Set Amount: </label>
         <input type="number" id="sendMoneyInput" name="sendMoneyInput"/>
         <div>
-          <button onClick={sendMoney} className="btn">Send Money</button>
+          <button onClick={sendMoney} className="btn">sendMoney</button>
         </div>
       </div>
       
