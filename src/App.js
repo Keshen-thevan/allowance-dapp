@@ -129,7 +129,13 @@ function App() {
   const setAllowance = async() =>{
     //need this contract to allow users ot withdraw funds
     //takes in two parameters, an address and an amount
-    
+    const allowanceAmount = document.getElementById("setAllowanceAmount").value
+    const allowanceAddress = document.getElementById("setAllowanceAddress").value
+    const signer = await getProviderOrSigner(true);
+    const walletContract = new Contract(contract_ADDRESS, contract_ABI, signer);
+    const tx = walletContract.setAllowance(allowanceAddress, allowanceAmount);
+    window.alert("allowance set. address: ", allowanceAddress, "amount: ", allowanceAmount)
+
   }
 
 
@@ -142,28 +148,33 @@ function App() {
       {walletConnected ? <div className="userOutput">{user}</div> :
       <div>
         <button onClick={connectWallet} className="btn">Connect Wallet</button>
-      </div> 
-      
-    }
-    <div className="accountBalance">
+      </div> }
+
+    <div className="accountBalance ">
       <p>accountBalance: {accountBalance}</p>
-      
     </div>
 
     <div>contract Balance: {contractBalance} wei</div>
     
     {owner ? <div className="ownerAddress">Owner: {ownerAddress}</div> : <div></div>}
 
-
-    <div className="accountBalance">
+    <div className="accountBalance container">
       <label for="name">Amount: </label>
       <input type="number" id="amountInput" name="name" />
       <button onClick={withdraw} className="btn">withdraw</button>
     </div>
 
+    <div className="setAllowance container">
+      <label for="setAllowanceAddress">SetAllowanceAddress: </label>
+      <input type="text" id="setAllowanceAddress" name="setAllowanceAddress"/>
+
+      <label for="setAllowanceAmount">SetAllowanceAmount: </label>
+      <input type="number" id="setAllowanceAmount" name="setAllowanceAmount"/>
       <div>
-        <button onClick={getOwner} className="btn">Get Owner</button>
+        <button className="btn" onClick={setAllowance}>setAllowance</button>
       </div>
+    </div>
+
       <div>
         <button onClick={ownerWithdraw} className="btn">Owner Withdraw</button>
       </div>
@@ -173,6 +184,7 @@ function App() {
       </div>
 
       <div>
+        <button onClick={getOwner} className="btn">Get Owner</button>
         <button onClick={getBalance} className="btn">getBalance</button>
       </div>
     </div>

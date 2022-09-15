@@ -14,7 +14,7 @@ install
 - owner() <done>
 
 ## latest additions:
-- the last thing i added was the owner withdraw.
+- the last thing i added the set allowance function. It takes in 2 parameters. all taken in by inputs.
 
 ## Things I learnt:
 - use the .toNumber() method to convert a big Number from a smart contract and changes it to a readable number for javascript to work with
