@@ -37,14 +37,22 @@ body{
 
 }
 
+.interface{
+  width: 500px !important;
+}
+
 .container{
+  background-color: beige;
+  padding: 30px;
   border-radius: 15px;
-  padding-top: 30px;
-  padding-bottom: 30px;
-  background-color: lightgoldenrodyellow;
-  margin-left: 510px;
-  margin-top: 30px;
-  width: 300px;
+  margin-top: 20px;
+  margin-left: 20px;
+}
+
+
+
+.allInputs{
+  display: flex;
 }
 
 

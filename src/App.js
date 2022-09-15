@@ -144,7 +144,8 @@ function App() {
 
   return (
     <div className="App">
-    
+      <div className="interface container">
+
       {walletConnected ? <div className="userOutput">{user}</div> :
       <div>
         <button onClick={connectWallet} className="btn">Connect Wallet</button>
@@ -157,6 +158,15 @@ function App() {
     <div>contract Balance: {contractBalance} wei</div>
     
     {owner ? <div className="ownerAddress">Owner: {ownerAddress}</div> : <div></div>}
+      <div>
+        <button onClick={ownerWithdraw} className="btn">Owner Withdraw</button>
+        <button onClick={getOwner} className="btn">Get Owner</button>
+        <button onClick={getBalance} className="btn">getBalance</button>
+      </div>
+
+      </div>
+    
+<div className="allInputs">
 
     <div className="accountBalance container">
       <label for="name">Amount: </label>
@@ -175,18 +185,17 @@ function App() {
       </div>
     </div>
 
-      <div>
-        <button onClick={ownerWithdraw} className="btn">Owner Withdraw</button>
-      </div>
+</div>
 
-      <div>
-        <button onClick={sendMoney} className="btn">Send Money</button>
+      <div className="container">
+        <label for="sendMoneyInput">Set Amount to send: </label>
+        <input type="number" id="sendMoneyInput" name="sendMoneyInput"/>
+        <div>
+          <button onClick={sendMoney} className="btn">Send Money</button>
+        </div>
       </div>
+      
 
-      <div>
-        <button onClick={getOwner} className="btn">Get Owner</button>
-        <button onClick={getBalance} className="btn">getBalance</button>
-      </div>
     </div>
   );
 }

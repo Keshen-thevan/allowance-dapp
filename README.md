@@ -3,13 +3,13 @@ install
 - ethers
 
 ## functions
-- setAllowance(_who, _amount)
+- setAllowance(_who, _amount) <done>
 - setOwner(_address) onlyOwner
-- withdrawOwner() onlyOwner
-- withdraw(_amount)
-- allowance(_address)
+- withdrawOwner() onlyOwner <done>
+- withdraw(_amount) <done>
+- allowance(_address) 
 - sendFunds() <done>
-- getBalance() onlyOwner
+- getBalance() onlyOwner <done>
     *the contract originally had a onlyOwner modifier on this function, but i changed it to not need owner
 - owner() <done>
 
