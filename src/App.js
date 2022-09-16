@@ -23,7 +23,7 @@ function App() {
     })
     setUser(accounts[0])
     //this gets the account of the current user
-    console.log("connected account: ", accounts[0]);
+
     //get the balance of the connected account
     const balance = await web3Provider.getBalance(accounts[0])
     //divides the number in wei to ether
@@ -68,8 +68,7 @@ function App() {
       });
       connectWallet();
     }
-  }, [walletConnected]);
-
+  }, [walletConnected, contractBalance]);
 
   const getOwner = async() =>{
     const provider = await getProviderOrSigner();
@@ -77,8 +76,7 @@ function App() {
     const _owner = await walletContract.owner()
     setOwner(true)
     setOwnerAddress(_owner)
-    //returns the user set as the owner of the smart contract
-    console.log("owner: ", _owner)
+
   
   } 
 
@@ -113,7 +111,6 @@ function App() {
     const signer = await getProviderOrSigner(true)
     const walletContract = new Contract(contract_ADDRESS, contract_ABI,signer)
     const tx = await walletContract.withdraw(amount)
-    console.log(amount)
     document.getElementById("amountInput").value = '';
     
   }
@@ -125,7 +122,6 @@ function App() {
       const tx = await walletContract.getBalance()
       const contractBalance = tx.toNumber()
       setContractBalance(contractBalance)
-      console.log("contractBalance: ",contractBalance)
 
     }catch(err){console.log(err)}
   }
@@ -144,31 +140,56 @@ function App() {
 
   }
 
+  function renderOwner(){
+    if(user.toLowerCase() == ownerAddress.toLowerCase()){
+      <>
+        {console.log("owner")}
+        {console.log(user)}
+        {console.log(ownerAddress)}
+        <div className="setAllowance container">
+        <h3>Set Allowance</h3>
+          <label for="setAllowanceAddress">SetAllowanceAddress: </label>
+          <input type="text" id="setAllowanceAddress" name="setAllowanceAddress"/>
+
+          <label for="setAllowanceAmount">SetAllowanceAmount: </label>
+          <input type="number" id="setAllowanceAmount" name="setAllowanceAmount"/>
+        <div>
+          <button className="btn" onClick={setAllowance}>setAllowance</button>
+        </div>
+      </div>
+    </>
+    }
+    else{
+      console.log("user")
+    }
+  }
 
 
 
-
+  
+  
   return (
     <div className="App">
+      {renderOwner()}
       <div className="interface container">
 
-      {walletConnected ? <div className="userOutput">{user}</div> :
-      <div>
-        <button onClick={connectWallet} className="btn">Connect Wallet</button>
-      </div> }
+        {walletConnected ? <div className="userOutput">{user}</div> :
+        <div>
+          <button onClick={connectWallet} className="btn">Connect Wallet</button>
+        </div> }
 
-    <div className="accountBalance ">
-      <p>accountBalance: {accountBalance}</p>
-    </div>
+        <div className="accountBalance ">
+          <p>accountBalance: {accountBalance}</p>
+        </div>
 
-    <div>contract Balance: {contractBalance} wei</div>
-    
-    {owner ? <div className="ownerAddress">Owner: {ownerAddress}</div> : <div></div>}
-      <div>
-        <button onClick={ownerWithdraw} className="btn">ownerWithdraw</button>
-        <button onClick={getOwner} className="btn">getOwner</button>
-        <button onClick={getBalance} className="btn">getBalance</button>
-      </div>
+      <div>contract Balance: {contractBalance} wei</div>
+      
+      {owner ? <div className="ownerAddress">Owner: {ownerAddress}</div> : <div></div>}
+        <div>
+          <button onClick={ownerWithdraw} className="btn">ownerWithdraw</button>
+          <button onClick={getOwner} className="btn">getOwner</button>
+          <button onClick={getBalance} className="btn">getBalance</button>
+        </div>
 
       </div>
     
@@ -176,37 +197,25 @@ function App() {
 
     <div className="withdraw container">
       <h3>Withdraw</h3>
-      <label for="name">Amount: </label>
-      <input type="number" id="amountInput" name="name" />
+        <label for="name">Amount: </label>
+        <input type="number" id="amountInput" name="name" />
       <div>
         <button onClick={withdraw} className="btn">withdraw</button>
       </div>
     </div>
 
-    <div className="setAllowance container">
-      <h3>Set Allowance</h3>
-      <label for="setAllowanceAddress">SetAllowanceAddress: </label>
-      <input type="text" id="setAllowanceAddress" name="setAllowanceAddress"/>
 
-      <label for="setAllowanceAmount">SetAllowanceAmount: </label>
-      <input type="number" id="setAllowanceAmount" name="setAllowanceAmount"/>
-      <div>
-        <button className="btn" onClick={setAllowance}>setAllowance</button>
-      </div>
-    </div>
 
 </div>
 
       <div className="container">
         <h3>Send Money</h3>
-        <label for="sendMoneyInput">Set Amount: </label>
-        <input type="number" id="sendMoneyInput" name="sendMoneyInput"/>
+          <label for="sendMoneyInput">Set Amount: </label>
+          <input type="number" id="sendMoneyInput" name="sendMoneyInput"/>
         <div>
           <button onClick={sendMoney} className="btn">sendMoney</button>
         </div>
       </div>
-      
-
     </div>
   );
 }
