@@ -91,6 +91,7 @@ function App() {
       const tx = await walletContract.sendMoney({value: sendMoneyAmount})
       await tx.wait()
       window.alert("funds sent");
+      document.getElementById("sendMoneyInput").value = '';
 
     }catch(err){console.error(err)}
   }
@@ -113,6 +114,7 @@ function App() {
     const walletContract = new Contract(contract_ADDRESS, contract_ABI,signer)
     const tx = await walletContract.withdraw(amount)
     console.log(amount)
+    document.getElementById("amountInput").value = '';
     
   }
 
@@ -137,6 +139,8 @@ function App() {
     const walletContract = new Contract(contract_ADDRESS, contract_ABI, signer);
     const tx = walletContract.setAllowance(allowanceAddress, allowanceAmount);
     window.alert("allowance set. address: ", allowanceAddress, "amount: ", allowanceAmount)
+    document.getElementById("setAllowanceAmount").value  = ''
+    document.getElementById("setAllowanceAddress").value = ''
 
   }
 
