@@ -55,6 +55,7 @@ function App() {
     try{
       await getProviderOrSigner()
       setWalletConnected(true)
+      getOwner()
     }catch(err){console.error(err)}
   }
 
@@ -142,25 +143,42 @@ function App() {
 
   function renderOwner(){
     if(user.toLowerCase() == ownerAddress.toLowerCase()){
-      <>
-        {console.log("owner")}
-        {console.log(user)}
-        {console.log(ownerAddress)}
-        <div className="setAllowance container">
-        <h3>Set Allowance</h3>
-          <label for="setAllowanceAddress">SetAllowanceAddress: </label>
-          <input type="text" id="setAllowanceAddress" name="setAllowanceAddress"/>
+      return(
+        <>
+          {console.log("owner")}
 
-          <label for="setAllowanceAmount">SetAllowanceAmount: </label>
-          <input type="number" id="setAllowanceAmount" name="setAllowanceAmount"/>
-        <div>
-          <button className="btn" onClick={setAllowance}>setAllowance</button>
-        </div>
-      </div>
-    </>
+          <div className="setAllowance container">
+          <h3>Set Allowance</h3>
+            <label for="setAllowanceAddress">SetAllowanceAddress: </label>
+            <input type="text" id="setAllowanceAddress" name="setAllowanceAddress"/>
+
+            <label for="setAllowanceAmount">SetAllowanceAmount: </label>
+            <input type="number" id="setAllowanceAmount" name="setAllowanceAmount"/>
+            <div>
+              <button className="btn" onClick={setAllowance}>setAllowance</button>
+            </div>
+          </div>
+          
+        </>
+      )
     }
     else{
-      console.log("user")
+      return(
+        <>
+          <div className="allInputs">
+            <div className="withdraw container">
+              <h3>Withdraw</h3>
+                <label for="name">Amount: </label>
+                <input type="number" id="amountInput" name="name" />
+              <div>
+                <button onClick={withdraw} className="btn">withdraw</button>
+              </div>
+            </div>
+        </div>
+        
+        </>
+      )
+      
     }
   }
 
@@ -170,45 +188,33 @@ function App() {
   
   return (
     <div className="App">
-      {renderOwner()}
+
       <div className="interface container">
 
-        {walletConnected ? <div className="userOutput">{user}</div> :
-        <div>
-          <button onClick={connectWallet} className="btn">Connect Wallet</button>
-        </div> }
-
-        <div className="accountBalance ">
-          <p>accountBalance: {accountBalance}</p>
-        </div>
-
-      <div>contract Balance: {contractBalance} wei</div>
-      
-      {owner ? <div className="ownerAddress">Owner: {ownerAddress}</div> : <div></div>}
-        <div>
-          <button onClick={ownerWithdraw} className="btn">ownerWithdraw</button>
-          <button onClick={getOwner} className="btn">getOwner</button>
-          <button onClick={getBalance} className="btn">getBalance</button>
-        </div>
-
-      </div>
-    
-<div className="allInputs">
-
-    <div className="withdraw container">
-      <h3>Withdraw</h3>
-        <label for="name">Amount: </label>
-        <input type="number" id="amountInput" name="name" />
+      {walletConnected ? <div className="userOutput">{user}</div> :
       <div>
-        <button onClick={withdraw} className="btn">withdraw</button>
+        <button onClick={connectWallet} className="btn">Connect Wallet</button>
+      </div> }
+
+      <div className="accountBalance ">
+        <p>accountBalance: {accountBalance}</p>
       </div>
+
+    <div>contract Balance: {contractBalance} wei</div>
+    
+    {owner ? <div className="ownerAddress">Owner: {ownerAddress}</div> : <div></div>}
+      <div>
+        <button onClick={ownerWithdraw} className="btn">ownerWithdraw</button>
+        <button onClick={getOwner} className="btn">getOwner</button>
+        <button onClick={getBalance} className="btn">getBalance</button>
+        <div id="buttonContainer"></div>
+        
+      </div>
+
     </div>
+        {renderOwner()}
 
-
-
-</div>
-
-      <div className="container">
+    <div className="container">
         <h3>Send Money</h3>
           <label for="sendMoneyInput">Set Amount: </label>
           <input type="number" id="sendMoneyInput" name="sendMoneyInput"/>
