@@ -10,9 +10,7 @@ body{
   padding: 20px;
   border-radius: 15px;
   border: none;
-  background-color: rebeccapurple;
   margin-top: 20px;
-  color: white;
   cursor: pointer;
 }
 
@@ -32,17 +30,11 @@ body{
 
 }
 
-.setAllowance{
- 
-
-}
-
 .interface{
   width: 500px !important;
 }
 
 .container{
-  background-color: beige;
   padding: 30px;
   border-radius: 15px;
   margin-top: 20px;
@@ -53,6 +45,22 @@ body{
   display: flex;
 }
 
+.owner{
+  background-color: #acdf87;
+}
 
+.user{
+  background-color: beige; 
+}
+
+.owner-btn{
+  background-color: red;
+  color: black;
+}
+
+.user-btn{
+  background-color: rebeccapurple;
+  color: white;
+}
 
 

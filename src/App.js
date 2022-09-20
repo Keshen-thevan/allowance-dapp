@@ -141,13 +141,40 @@ function App() {
 
   }
 
+  const getAllowanceLimit = async() =>{
+    const provider = await getProviderOrSigner()
+    const walletContract = new Contract(contract_ADDRESS,contract_ABI,provider)
+    const tx = await walletContract.getAllowanceLimit(user)
+    console.log("allowance: ", tx.toNumber())
+  }
+
   function renderOwner(){
     if(user.toLowerCase() == ownerAddress.toLowerCase()){
       return(
         <>
+        <div className="interface container owner">
+
+          {walletConnected ? <div className="userOutput">{user}</div> :
+          <div>
+            <button onClick={connectWallet} className="btn owner-btn">Connect Wallet</button>
+          </div> }
+
+          <div className="accountBalance ">
+            <p>accountBalance: {accountBalance}</p>
+          </div>
+
+          <div>contract Balance: {contractBalance} wei</div>
+
+          {owner ? <div className="ownerAddress">Owner: {ownerAddress}</div> : <div></div>}
+          <div>
+            <button onClick={ownerWithdraw} className="btn owner-btn">ownerWithdraw</button>
+            <button onClick={getBalance} className="btn owner-btn">getBalance</button>
+            <div id="buttonContainer"></div>
+          </div>
+        </div>
           {console.log("owner")}
 
-          <div className="setAllowance container">
+          <div className="setAllowance container owner">
           <h3>Set Allowance</h3>
             <label for="setAllowanceAddress">SetAllowanceAddress: </label>
             <input type="text" id="setAllowanceAddress" name="setAllowanceAddress"/>
@@ -155,9 +182,17 @@ function App() {
             <label for="setAllowanceAmount">SetAllowanceAmount: </label>
             <input type="number" id="setAllowanceAmount" name="setAllowanceAmount"/>
             <div>
-              <button className="btn" onClick={setAllowance}>setAllowance</button>
+              <button className="btn owner-btn" onClick={setAllowance}>setAllowance</button>
             </div>
           </div>
+          <div className="container owner">
+        <h3>Send Money</h3>
+          <label for="sendMoneyInput">Set Amount: </label>
+          <input type="number" id="sendMoneyInput" name="sendMoneyInput"/>
+        <div>
+          <button onClick={sendMoney} className="btn owner-btn">sendMoney</button>
+        </div>
+      </div>
           
         </>
       )
@@ -165,16 +200,45 @@ function App() {
     else{
       return(
         <>
-          <div className="allInputs">
-            <div className="withdraw container">
+        <div className="interface container user">
+
+          {walletConnected ? <div className="userOutput">{user}</div> :
+          <div>
+            <button onClick={connectWallet} className="btn user-btn">Connect Wallet</button>
+          </div> }
+
+          <div className="accountBalance ">
+            <p>accountBalance: {accountBalance}</p>
+          </div>
+
+          <div>contract Balance: {contractBalance} wei</div>
+
+          {owner ? <div className="ownerAddress">Owner: {ownerAddress}</div> : <div></div>}
+          <div>
+            <button onClick={getBalance} className="btn user-btn">getBalance</button>
+            <button onClick={getAllowanceLimit} className="btn user-btn">getAllowanceLimit</button>
+            <div id="buttonContainer"></div>
+            
+          </div>
+        </div>
+        <div className="allInputs">
+            <div className="withdraw container user">
               <h3>Withdraw</h3>
                 <label for="name">Amount: </label>
                 <input type="number" id="amountInput" name="name" />
               <div>
-                <button onClick={withdraw} className="btn">withdraw</button>
+                <button onClick={withdraw} className="btn user-btn">withdraw</button>
               </div>
             </div>
         </div>
+        <div className="container user">
+        <h3>Send Money</h3>
+          <label for="sendMoneyInput">Set Amount: </label>
+          <input type="number" id="sendMoneyInput" name="sendMoneyInput"/>
+        <div>
+          <button onClick={sendMoney} className="btn user-btn">sendMoney</button>
+        </div>
+      </div>
         
         </>
       )
@@ -184,44 +248,11 @@ function App() {
 
 
 
-  
+   
   
   return (
     <div className="App">
-
-      <div className="interface container">
-
-      {walletConnected ? <div className="userOutput">{user}</div> :
-      <div>
-        <button onClick={connectWallet} className="btn">Connect Wallet</button>
-      </div> }
-
-      <div className="accountBalance ">
-        <p>accountBalance: {accountBalance}</p>
-      </div>
-
-    <div>contract Balance: {contractBalance} wei</div>
-    
-    {owner ? <div className="ownerAddress">Owner: {ownerAddress}</div> : <div></div>}
-      <div>
-        <button onClick={ownerWithdraw} className="btn">ownerWithdraw</button>
-        <button onClick={getOwner} className="btn">getOwner</button>
-        <button onClick={getBalance} className="btn">getBalance</button>
-        <div id="buttonContainer"></div>
-        
-      </div>
-
-    </div>
         {renderOwner()}
-
-    <div className="container">
-        <h3>Send Money</h3>
-          <label for="sendMoneyInput">Set Amount: </label>
-          <input type="number" id="sendMoneyInput" name="sendMoneyInput"/>
-        <div>
-          <button onClick={sendMoney} className="btn">sendMoney</button>
-        </div>
-      </div>
     </div>
   );
 }
