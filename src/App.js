@@ -13,6 +13,7 @@ function App() {
   const [accountBalance, setAccountBalance] = useState('')
   const [owner, setOwner] = useState(false)
   const [ownerAddress, setOwnerAddress] = useState('')
+  const [userLimit, setUserLimit] = useState("")
 
   const getProviderOrSigner = async (needSigner = false) => {
     const provider = await web3ModalRef.current.connect();
@@ -145,7 +146,9 @@ function App() {
     const provider = await getProviderOrSigner()
     const walletContract = new Contract(contract_ADDRESS,contract_ABI,provider)
     const tx = await walletContract.getAllowanceLimit(user)
-    console.log("allowance: ", tx.toNumber())
+    const limit = tx.toNumber()
+    setUserLimit(limit)
+    console.log("allowance: ", userLimit)
   }
 
   function renderOwner(){
@@ -164,8 +167,6 @@ function App() {
           </div>
 
           <div>contract Balance: {contractBalance} wei</div>
-
-          {owner ? <div className="ownerAddress">Owner: {ownerAddress}</div> : <div></div>}
           <div>
             <button onClick={ownerWithdraw} className="btn owner-btn">ownerWithdraw</button>
             <button onClick={getBalance} className="btn owner-btn">getBalance</button>
@@ -212,6 +213,7 @@ function App() {
           </div>
 
           <div>contract Balance: {contractBalance} wei</div>
+          <div>userLimit: {userLimit} wei</div>
 
           {owner ? <div className="ownerAddress">Owner: {ownerAddress}</div> : <div></div>}
           <div>
