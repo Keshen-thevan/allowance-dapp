@@ -166,14 +166,13 @@ function App() {
             <p>accountBalance: {accountBalance}</p>
           </div>
 
-          <div>contract Balance: {contractBalance} wei</div>
+          {contractBalance ? <div>contract Balance: {contractBalance} wei</div> : <div></div>}
           <div>
             <button onClick={ownerWithdraw} className="btn owner-btn">ownerWithdraw</button>
             <button onClick={getBalance} className="btn owner-btn">getBalance</button>
             <div id="buttonContainer"></div>
           </div>
         </div>
-          {console.log("owner")}
 
           <div className="setAllowance container owner">
           <h3>Set Allowance</h3>
@@ -212,8 +211,7 @@ function App() {
             <p>accountBalance: {accountBalance}</p>
           </div>
 
-          <div>contract Balance: {contractBalance} wei</div>
-          <div>userLimit: {userLimit} wei</div>
+          {userLimit ? <div>userLimit: {userLimit} wei</div> : <div></div>}
 
           {owner ? <div className="ownerAddress">Owner: {ownerAddress}</div> : <div></div>}
           <div>
