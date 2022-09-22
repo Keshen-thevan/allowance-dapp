@@ -56,7 +56,7 @@ function App() {
     try{
       await getProviderOrSigner()
       setWalletConnected(true)
-      getOwner()
+      await getOwner()
     }catch(err){console.error(err)}
   }
 
@@ -71,6 +71,10 @@ function App() {
       connectWallet();
     }
   }, [walletConnected, contractBalance]);
+
+  useEffect(() =>{
+    renderOwner()
+  },[user])
 
   const getOwner = async() =>{
     const provider = await getProviderOrSigner();
@@ -246,10 +250,6 @@ function App() {
     }
   }
 
-
-
-   
-  
   return (
     <div className="App">
         {renderOwner()}
