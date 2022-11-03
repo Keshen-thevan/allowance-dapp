@@ -23,3 +23,8 @@ install
 
 2. when returning the balance of the smart contract, it returns it in wei, i need it to be in ether
 
+## features to add
+- change the ui to have a sidebar with all the options on the side and have the ui change depending on the what the user
+selects on the sidebar.
+- user should be able to stake and the yield will paid out in woolong token
+- they would also be able to mint woolong tokens

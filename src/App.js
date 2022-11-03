@@ -34,9 +34,9 @@ function App() {
     setAccountBalance(userBalance)
 
     const { chainId } = await web3Provider.getNetwork();
-    if (chainId !== 4) {
-      window.alert("Change the network to Rinkeby");
-      throw new Error("Change network to Rinkeby");
+    if (chainId !== 80001 ) {
+      window.alert("Change the network to Mumbai testnet");
+      throw new Error("Change network to Mumbai testnet");
     }
 
     if (needSigner) {
@@ -64,7 +64,7 @@ function App() {
     if (!walletConnected) {
 
       web3ModalRef.current = new Web3Modal({
-        network: "rinkeby",
+        network: "mumbai",
         providerOptions: {},
         disableInjectedProvider: false,
       });
@@ -82,8 +82,6 @@ function App() {
     const _owner = await walletContract.owner()
     setOwner(true)
     setOwnerAddress(_owner)
-
-  
   } 
 
   const sendMoney = async() => {
@@ -105,7 +103,8 @@ function App() {
       const signer = await getProviderOrSigner(true)
       const walletContract = new Contract(contract_ADDRESS, contract_ABI, signer)
       const tx = walletContract.withdrawOwner()
-      await window.alert("funds transfered")
+      await tx.wait()
+      window.alert("all funds withdrawn")
     }catch(err){console.error(err)}
     
   }
@@ -126,9 +125,11 @@ function App() {
       const provider = await getProviderOrSigner(true);
       const walletContract = new Contract(contract_ADDRESS,contract_ABI,provider);
       const tx = await walletContract.getBalance()
-      const contractBalance = tx.toNumber()
-      setContractBalance(contractBalance)
-
+      const _contractBalance = tx.toNumber()
+      if(_contractBalance === 0){
+        setContractBalance('0')
+      }else{setContractBalance(_contractBalance)}
+      console.log(_contractBalance)
     }catch(err){console.log(err)}
   }
 
@@ -137,13 +138,15 @@ function App() {
     //takes in two parameters, an address and an amount
     const allowanceAmount = document.getElementById("setAllowanceAmount").value
     const allowanceAddress = document.getElementById("setAllowanceAddress").value
+    const _allowanceAmount = allowanceAmount.toLocaleString()
+    const _allowanceAddress = allowanceAddress.toLocaleString()
     const signer = await getProviderOrSigner(true);
     const walletContract = new Contract(contract_ADDRESS, contract_ABI, signer);
-    const tx = walletContract.setAllowance(allowanceAddress, allowanceAmount);
-    window.alert("allowance set. address: ", allowanceAddress, "amount: ", allowanceAmount)
+    const tx = await walletContract.setAllowance(allowanceAddress, allowanceAmount);
+    await tx.wait()
+    window.alert("allowance set. \naddress: " + _allowanceAddress + "\namount: " + _allowanceAmount)
     document.getElementById("setAllowanceAmount").value  = ''
     document.getElementById("setAllowanceAddress").value = ''
-
   }
 
   const getAllowanceLimit = async() =>{
@@ -151,15 +154,17 @@ function App() {
     const walletContract = new Contract(contract_ADDRESS,contract_ABI,provider)
     const tx = await walletContract.getAllowanceLimit(user)
     const limit = tx.toNumber()
+    console.log(tx)
     setUserLimit(limit)
     console.log("allowance: ", userLimit)
   }
 
   function renderOwner(){
-    if(user.toLowerCase() == ownerAddress.toLowerCase()){
+    if(user.toLowerCase() === ownerAddress.toLowerCase()){
       return(
         <>
         <div className="interface container owner">
+        <h2>ADMIN</h2>
 
           {walletConnected ? <div className="userOutput">{user}</div> :
           <div>
@@ -167,10 +172,10 @@ function App() {
           </div> }
 
           <div className="accountBalance ">
-            <p>accountBalance: {accountBalance}</p>
+            <p>accountBalance: {accountBalance} ETH</p>
           </div>
 
-          {contractBalance ? <div>contract Balance: {contractBalance} wei</div> : <div></div>}
+          {contractBalance? <div>contract Balance: {contractBalance} wei</div> : <div></div>}
           <div>
             <button onClick={ownerWithdraw} className="btn owner-btn">ownerWithdraw</button>
             <button onClick={getBalance} className="btn owner-btn">getBalance</button>
@@ -180,10 +185,10 @@ function App() {
 
           <div className="setAllowance container owner">
           <h3>Set Allowance</h3>
-            <label for="setAllowanceAddress">SetAllowanceAddress: </label>
+            <label htmlFor="setAllowanceAddress">SetAllowanceAddress: </label>
             <input type="text" id="setAllowanceAddress" name="setAllowanceAddress"/>
 
-            <label for="setAllowanceAmount">SetAllowanceAmount: </label>
+            <label htmlFor="setAllowanceAmount">SetAllowanceAmount: </label>
             <input type="number" id="setAllowanceAmount" name="setAllowanceAmount"/>
             <div>
               <button className="btn owner-btn" onClick={setAllowance}>setAllowance</button>
@@ -191,7 +196,7 @@ function App() {
           </div>
           <div className="container owner">
         <h3>Send Money</h3>
-          <label for="sendMoneyInput">Set Amount: </label>
+          <label htmlFor="sendMoneyInput">Set Amount: </label>
           <input type="number" id="sendMoneyInput" name="sendMoneyInput"/>
         <div>
           <button onClick={sendMoney} className="btn owner-btn">sendMoney</button>
@@ -212,14 +217,13 @@ function App() {
           </div> }
 
           <div className="accountBalance ">
-            <p>accountBalance: {accountBalance}</p>
+            <p>accountBalance: {accountBalance} ETH</p>
           </div>
 
           {userLimit ? <div>userLimit: {userLimit} wei</div> : <div></div>}
 
           {owner ? <div className="ownerAddress">Owner: {ownerAddress}</div> : <div></div>}
           <div>
-            <button onClick={getBalance} className="btn user-btn">getBalance</button>
             <button onClick={getAllowanceLimit} className="btn user-btn">getAllowanceLimit</button>
             <div id="buttonContainer"></div>
             

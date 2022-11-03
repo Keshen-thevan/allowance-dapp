@@ -1,86 +1,75 @@
-export const contract_ADDRESS = '0x12B8277B364973a5940B289664aa497FdD79881E';
+export const contract_ADDRESS = '0x04145BeB85Fd6C7b30faFb49BB8974318e5948E7';
 
 export const contract_ABI = [
 	{
-		"constant": false,
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "previousOwner",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "newOwner",
+				"type": "address"
+			}
+		],
+		"name": "OwnershipTransferred",
+		"type": "event"
+	},
+	{
 		"inputs": [],
-		"name": "fallback",
+		"name": "renounceOwnership",
 		"outputs": [],
-		"payable": true,
-		"stateMutability": "payable",
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
-		"constant": false,
 		"inputs": [],
 		"name": "sendMoney",
 		"outputs": [],
-		"payable": true,
 		"stateMutability": "payable",
 		"type": "function"
 	},
 	{
-		"constant": false,
 		"inputs": [
 			{
 				"internalType": "address",
-				"name": "_who",
+				"name": "_address",
 				"type": "address"
 			},
 			{
 				"internalType": "uint256",
-				"name": "_amount",
+				"name": "_limit",
 				"type": "uint256"
 			}
 		],
 		"name": "setAllowance",
 		"outputs": [],
-		"payable": false,
 		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
-		"constant": false,
 		"inputs": [
 			{
-				"internalType": "address payable",
-				"name": "_newOwner",
+				"internalType": "address",
+				"name": "newOwner",
 				"type": "address"
 			}
 		],
-		"name": "setOwner",
+		"name": "transferOwnership",
 		"outputs": [],
-		"payable": false,
 		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
-		"inputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "constructor"
+		"stateMutability": "payable",
+		"type": "fallback"
 	},
 	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"name": "setOwnerEvent",
-		"type": "event"
-	},
-	{
-		"constant": false,
 		"inputs": [
 			{
 				"internalType": "uint256",
@@ -90,65 +79,25 @@ export const contract_ABI = [
 		],
 		"name": "withdraw",
 		"outputs": [],
-		"payable": false,
 		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"name": "withdrawEvent",
-		"type": "event"
-	},
-	{
-		"constant": false,
 		"inputs": [],
 		"name": "withdrawOwner",
 		"outputs": [],
-		"payable": false,
 		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
-		"constant": true,
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"name": "allowance",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
+		"stateMutability": "payable",
+		"type": "receive"
 	},
 	{
-		"constant": true,
 		"inputs": [
 			{
 				"internalType": "address",
-				"name": "_user",
+				"name": "_address",
 				"type": "address"
 			}
 		],
@@ -160,12 +109,10 @@ export const contract_ABI = [
 				"type": "uint256"
 			}
 		],
-		"payable": false,
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
-		"constant": true,
 		"inputs": [],
 		"name": "getBalance",
 		"outputs": [
@@ -175,22 +122,19 @@ export const contract_ABI = [
 				"type": "uint256"
 			}
 		],
-		"payable": false,
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
-		"constant": true,
 		"inputs": [],
 		"name": "owner",
 		"outputs": [
 			{
-				"internalType": "address payable",
+				"internalType": "address",
 				"name": "",
 				"type": "address"
 			}
 		],
-		"payable": false,
 		"stateMutability": "view",
 		"type": "function"
 	}
