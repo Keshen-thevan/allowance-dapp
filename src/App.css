@@ -1,9 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600&display=swap');
+
+/* remove the scrollbar from inputs */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+:root {
+  --primary: #6119d6;
+  --secondary: #fc6a03;
+  --bg-color: #ffffffff;
+  --font-color: white;
+}
+
+
 .App {
   text-align: center;
 }
 
 body{
-  background-color: #222121ad;
+  background-color: var(--bg-color);
+  
 }
 
 .btn{
@@ -11,28 +28,30 @@ body{
   border-radius: 15px;
   border: none;
   margin-top: 20px;
+  font-weight: 500;
   cursor: pointer;
 }
 
 .userOutput{
   margin-top: 50px;
   font-size: 20px;
+  color:rgb(53, 50, 50)
 }
 
 .accountBalance{
-  color: #0d3d56;
+  color: white;
   font-size: 20px;
 }
 
 .ownerAddress{
-  color: orange;
+  color: white;
   margin-top: 20px;
 
 }
 
-.interface{
-  width: 500px !important;
-}
+/* .interface{
+  width: 90vw !important;
+} */
 
 .container{
   padding: 30px;
@@ -43,24 +62,61 @@ body{
 
 .allInputs{
   display: flex;
+  color: var(--font-color);
+  width: 96vw;
 }
 
 .owner{
-  background-color: #acdf87;
+  background-color: var(--primary);
+  width: 90vw;
+  font-family:'Noto Sans', sans-serif;
+  color: var(--font-color);
 }
 
 .user{
-  background-color: beige; 
+  background-color: rgb(238, 100, 84); 
+  width: 90vw;
+  font-family:'Noto Sans', sans-serif;
+  color: var(--font-color);
+
 }
 
 .owner-btn{
-  background-color: red;
+  margin-right: 10px;
+  background-color: var(--secondary);
   color: black;
 }
 
 .user-btn{
-  background-color: rebeccapurple;
+  background-color: red;
   color: white;
 }
 
+.txtbox{
+  background-color: beige;
+  border: none;
+  margin-right: 60px;
+  margin-left: 15px;
+  height: 20px;
+  border-radius: 5px;
+  border-bottom: 1px solid black ;
+}
 
+.txtbox:hover{
+  background-color: grey;
+  cursor: pointer;
+}
+
+.btn:hover{
+  cursor: pointer;
+  background-color: #ff8b3d;
+  box-shadow: 2px 2px 5px rgb(53, 50, 50);
+}
+
+
+.user-btn:hover{
+  cursor: pointer;
+  background-color: rgb(179, 3, 3);
+  box-shadow: 2px 2px 5px rgb(53, 50, 50);
+
+}
