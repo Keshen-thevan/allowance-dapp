@@ -1,5 +1,6 @@
 import './App.css';
-import Web3Modal from 'web3modal'
+import Swal from 'sweetalert2'
+import Web3Modal, { getProviderInfoFromChecksArray } from 'web3modal'
 import { providers, Contract, utils, ethers } from "ethers"
 import { useRef, useEffect, useState } from "react"
 import { contract_ABI, contract_ADDRESS } from '../src/constants'
@@ -53,6 +54,7 @@ function App() {
   };
 
   const connectWallet = async() =>{
+    console.log('wallet connected')
     try{
       await getProviderOrSigner()
       setWalletConnected(true)
@@ -159,6 +161,8 @@ function App() {
     console.log("allowance: ", userLimit)
   }
 
+  
+
   function renderOwner(){
     if(user.toLowerCase() === ownerAddress.toLowerCase()){
       return(
@@ -178,6 +182,7 @@ function App() {
           {contractBalance? <div>contract Balance: {contractBalance} wei</div> : <div></div>}
           <div>
             <button onClick={ownerWithdraw} className="btn owner-btn">ownerWithdraw</button>
+            <span></span>
             <button onClick={getBalance} className="btn owner-btn">getBalance</button>
             <div id="buttonContainer"></div>
           </div>
@@ -186,10 +191,10 @@ function App() {
           <div className="setAllowance container owner">
           <h3>Set Allowance</h3>
             <label htmlFor="setAllowanceAddress">SetAllowanceAddress: </label>
-            <input type="text" id="setAllowanceAddress" name="setAllowanceAddress"/>
+            <input type="text" id="setAllowanceAddress" name="setAllowanceAddress" class = 'txtbox'/>
 
             <label htmlFor="setAllowanceAmount">SetAllowanceAmount: </label>
-            <input type="number" id="setAllowanceAmount" name="setAllowanceAmount"/>
+            <input type="number" id="setAllowanceAmount" name="setAllowanceAmount" class = 'txtbox'/>
             <div>
               <button className="btn owner-btn" onClick={setAllowance}>setAllowance</button>
             </div>
@@ -197,10 +202,30 @@ function App() {
           <div className="container owner">
         <h3>Send Money</h3>
           <label htmlFor="sendMoneyInput">Set Amount: </label>
-          <input type="number" id="sendMoneyInput" name="sendMoneyInput"/>
+          <input type="number" id="sendMoneyInput" name="sendMoneyInput" class = 'txtbox'/>
         <div>
           <button onClick={sendMoney} className="btn owner-btn">sendMoney</button>
         </div>
+        {/* remove when done with alert testing */}
+        <div>
+          <button className="btn owner-btn" onClick ={()=>{
+            const title = 'welcome here'
+            Swal.fire({
+              title: 'Alert',
+              text: `${title}`,
+              icon: 'success',
+              background: '#6119d6',
+              color: 'white', 
+              padding: '100px',
+              iconColor: 'white',
+              backdrop: 'rgba(0,0,123,0.7)',
+              grow: 'column', 
+              confirmButtonText: 'close',
+              confirmButtonColor: '#fc6a03'
+            })
+            
+          }}>alert</button>
+      </div>
       </div>
           
         </>
@@ -222,7 +247,7 @@ function App() {
 
           {userLimit ? <div>userLimit: {userLimit} wei</div> : <div></div>}
 
-          {owner ? <div className="ownerAddress">Owner: {ownerAddress}</div> : <div></div>}
+          {/* {owner ? <div className="ownerAddress">Owner: {ownerAddress}</div> : <div></div>} */}
           <div>
             <button onClick={getAllowanceLimit} className="btn user-btn">getAllowanceLimit</button>
             <div id="buttonContainer"></div>
@@ -233,20 +258,20 @@ function App() {
             <div className="withdraw container user">
               <h3>Withdraw</h3>
                 <label for="name">Amount: </label>
-                <input type="number" id="amountInput" name="name" />
+                <input className ='txtbox' type="number" id="amountInput" name="name" />
               <div>
                 <button onClick={withdraw} className="btn user-btn">withdraw</button>
               </div>
             </div>
-        </div>
         <div className="container user">
         <h3>Send Money</h3>
           <label for="sendMoneyInput">Set Amount: </label>
-          <input type="number" id="sendMoneyInput" name="sendMoneyInput"/>
+          <input className ='txtbox' type="number" id="sendMoneyInput" name="sendMoneyInput"/>
         <div>
           <button onClick={sendMoney} className="btn user-btn">sendMoney</button>
         </div>
       </div>
+        </div>
         
         </>
       )
