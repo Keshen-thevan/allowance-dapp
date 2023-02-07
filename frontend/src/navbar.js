@@ -8,7 +8,6 @@ function navbar(){
           <NavLink to='/userWithdraw'>Withdraw</NavLink>
           <NavLink to='/userSendMoney'>Send Money</NavLink>
           <NavLink to='/stake'>Stake</NavLink>
-
         </nav>
         </>
     )

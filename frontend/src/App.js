@@ -1,29 +1,44 @@
 import './App.css';
 import Swal from 'sweetalert2'
-import Web3Modal, { getProviderInfoFromChecksArray } from 'web3modal'
-import {BrowserRouter, Route, Routes, NavLink} from 'react-router-dom';
+import Web3Modal from 'web3modal'
+import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import Navbar from './navbar'
 import OwnerNavbar from './ownerNavbar'
 import 'react-range-slider-input/dist/style.css';
-import { providers, Contract, utils, ethers } from "ethers"
+import { providers, Contract, utils } from "ethers"
 import { useRef, useEffect, useState } from "react"
-import { contract_ABI, contract_ADDRESS } from '../src/constants'
+import { contract_ABI, contract_ADDRESS, contract_address_two, contract_abi_two } from '../src/constants'
 
 
 function App() {
   const web3ModalRef = useRef();
+  // bool to track if wallet is connected
   const [walletConnected, setWalletConnected] = useState(false)
+  // string holding user address
   const [user, setUser] = useState('')
+  // string holding contract balance
   const [contractBalance, setContractBalance] = useState('')
+  // string holding connect account balance
   const [accountBalance, setAccountBalance] = useState('')
+  // bool
   const [owner, setOwner] = useState(false)
+  // string holding owner address
   const [ownerAddress, setOwnerAddress] = useState('')
+  // string holding the connected users limit
   const [userLimit, setUserLimit] = useState("")
-  const [stakeOutput, setStakeOutput] = useState('50')
-  const [stakeResult, setStakeResult] = useState('50')
+
+  // --- SMART CONTRACT VARIABLES ---
+
+  // this gets the number from the range input and set it to state (stakeInput)
+  const [stakeOutput, setStakeOutput] = useState(50)
+  // this calculates the percent return on the stake
+  const [stakeResult, setStakeResult] = useState(50)
   const [duration, setDuration] = useState(0)
-  const [isStake, setIsStake] = useState(false)
-  // const [countDown, setCountDown] = useState()
+  // bool holding if there is currently a stake
+  const [isStake, setIsStake] = useState(true)
+  // the returned value from the smart contract
+  const [SMstakeEnd, setSMstakeEnd] = useState(0)
+
 
   const getProviderOrSigner = async (needSigner = false) => {
     const provider = await web3ModalRef.current.connect();
@@ -55,7 +70,6 @@ function App() {
     }
 
     if(provider){
-      console.log("user Connected")
       setWalletConnected(true)
     }else{setWalletConnected(false)}
 
@@ -68,6 +82,7 @@ function App() {
       await getProviderOrSigner()
       setWalletConnected(true)
       await getOwner()
+   
     }catch(err){console.error(err)}
   }
 
@@ -81,6 +96,7 @@ function App() {
       });
       connectWallet();
     }
+      getUserStakeData()
   }, [walletConnected, contractBalance]);
 
   useEffect(() =>{
@@ -127,6 +143,8 @@ function App() {
     const signer = await getProviderOrSigner(true)
     const walletContract = new Contract(contract_ADDRESS, contract_ABI,signer)
     const tx = await walletContract.withdraw(amount)
+    tx.wait()
+    alert('funds withdrawn')
     document.getElementById("amountInput").value = '';
     
   }
@@ -170,23 +188,66 @@ function App() {
     console.log("allowance: ", userLimit)
   }
 
+  // returns the end date from the smart contract
+  async function getUserStakeData() {
+    const provider = await getProviderOrSigner()
+    const walletContract = new Contract(contract_address_two, contract_abi_two, provider)
+    const tx = await walletContract.getStakeUserData(user);
+    console.log(tx.isStake)
+    console.log(tx.stakeAmount.toNumber() + ' stakeAmount')
+    console.log(tx.stakeStartDate.toNumber() + ' stakeStartDate')
+    console.log(tx.stakeEndDate.toNumber() + ' stakeEndDate')
+    console.log(tx.stakeTotal.toNumber() + ' stake total')
 
+    setIsStake(tx.isStake)
+    setStakeOutput(tx.stakeAmount.toNumber())
+    setStakeResult(tx.stakeTotal.toNumber())
+    setSMstakeEnd(tx.stakeEndDate.toNumber() * 1000)
+    
+    // need to set and get isStake from the smart contract
 
- 
-  // convert duration into an int
-  var durationInt = parseInt(duration)
-  // date now, returns value between(1-30)
-  var present = new Date().getDate();
-  const endDate = new Date()
-  // sets var endDate to the new end date by adding the current date plus the duration
-  endDate.setDate(present +  durationInt)
+  }
+  
+
+// the functions that runs onClick in stake and starts the countdown in the smart contract
+// sets the userStake data
+  const SMstartCountdown = async() =>{
+    try{
+      const signer = await getProviderOrSigner(true)
+      const walletContract = new Contract(contract_address_two, contract_abi_two,signer)
+      // function takes in duration, the stake amount, _stakeTotal
+
+      // need to find a way to pass in the end amount or i will just have to calculate it in the smart contract
+      const tx = await walletContract.setStake(duration, stakeOutput, stakeResult)
+      await tx.wait()
+      getUserStakeData()
+      alert(stakeResult + ' wei' + duration  )
+      setIsStake(true)
+    }
+    catch(err){
+      console.log(err)
+    }
+  }
+
+  const resetStake = async() =>{
+    try{
+      const signer = await getProviderOrSigner(true);
+      const walletContract = new Contract(contract_address_two, contract_abi_two, signer)
+      const tx = await walletContract.resetStake()
+      await tx.wait()
+      alert('stake has been reset')
+      getUserStakeData()
+    }catch(err){console.log(err)}
+  }
+
   
    // func handles the count down for the stake section and is run every second
   const countdown = setInterval(() => {
     // only runs the countdown calc if there is currently a stake
-    if(isStake){
-      var now = new Date().getTime();
-      var timeleft = endDate.getTime() - now
+    var now = new Date().getTime();
+    // timeleft = the var from the smart contract - now
+    var timeleft = SMstakeEnd - now
+    if(isStake && timeleft > 1){
 
       // calc the days, hours, mins and secs from the milliseconds
       var days = Math.floor(timeleft / (1000 * 60 * 60 * 24));
@@ -202,20 +263,13 @@ function App() {
       // if timeleft equals zero, will set isStake to false so the user can return to stake screen
       if(timeleft === 0){
         setIsStake(false)
+        console.log('the time for the stake is 0')
       }else{return}
     }
     
   }, 1000)
     
 
-  // func runs on button click in stake section
-  const getStake = () =>{
-    alert(stakeResult + ' wei' + duration)
-    setIsStake(true)
-  }
-
-
-  
 // this func handles changes to inputs in the stake section and 
  const changeStakeOutput = ()=>{
   const number = document.getElementById('stakeInput').value
@@ -254,7 +308,8 @@ function App() {
 
   
 
-  
+
+
 
   function renderOwner(){
     if(user.toLowerCase() === ownerAddress.toLowerCase()){
@@ -394,16 +449,16 @@ function App() {
               {/* // ternary operator to render output depending whether the user has a stake */}
               { isStake === true ? 
               <div>
-                  <h4>You already have a stake in progress!</h4>
+                  <h4>You currently have a stake in progress!</h4>
                   <div >
-                    <h2 id="countdown"></h2>
+                    <h2 id="countdown">countdown</h2>
                     <h4>till completion</h4>
                     <div>
                       <p>stake: {stakeOutput}</p>
                       <p>return: {stakeResult} Woolong</p>
                     </div>
                   </div>
-                 
+                  <button className="btn owner-btn" onClick={resetStake}>reset Stake</button>
               </div> : 
               <div>
               <div className="stakeContainer">
@@ -429,11 +484,10 @@ function App() {
                 
               </div>
 
-              <button className="btn owner-btn" onClick={getStake}>stake</button>
+              <button className="btn owner-btn" onClick={SMstartCountdown}>stake</button>
+              
               </div>}
               
-
-
             </div>}/>
           </Routes>
         </div>

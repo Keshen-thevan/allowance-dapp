@@ -9,6 +9,7 @@ input::-webkit-inner-spin-button {
 :root {
   --primary: #6119d6;
   --secondary: #f7f322;
+  /* --secondary: #D6CF1A; */
   --bg-color: #ffffffff;
   --font-color: white;
 }

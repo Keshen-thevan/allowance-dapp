@@ -7,7 +7,7 @@ function navbar(){
           <NavLink to='/'>Dashboard</NavLink>
           <NavLink to='/setAllowance'>Set Allowance</NavLink>
           <NavLink to='/sendMoney'>Send Money</NavLink>
-
+          <NavLink to='/stake'>Stake</NavLink>
         </nav>
         </>
     )
