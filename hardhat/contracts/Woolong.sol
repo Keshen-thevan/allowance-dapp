@@ -1,7 +1,7 @@
 //SPDX-License-Identifier: MIT
 pragma solidity ^0.8.12;
 
-import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v4.0.0/contracts/token/ERC20/ERC20.sol";
 
 contract Woolong is ERC20{
 
@@ -19,7 +19,9 @@ contract Woolong is ERC20{
     }
     
     constructor() ERC20("Woolongs", "Woo"){
-
+        // 1 dollar = 100 cents
+        // 1 token = 1 * (10 ** decimals)
+        _mint(msg.sender, 100 * 10 ** uint(decimals()));
     }
 
     function mint(uint256 _amount)external payable{
@@ -48,6 +50,10 @@ contract Woolong is ERC20{
 
     function resetStake() external {
         stakeUsers[msg.sender] = StakeUser(false, 0 , 0, 0 , 0);
+    }
+
+    function getTokensOwned() external returns(uint256){
+        return tokensOwned[msg.sender];
     }
 
     // this function would be called at the end of the of the stake duration. it takes an amount as a parameter.

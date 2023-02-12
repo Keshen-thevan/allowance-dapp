@@ -5,7 +5,17 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract allowanceContract is Ownable{
     mapping( address => uint256 ) allowance;
+    uint256 public totalUsers;
+    uint256 [] users;
 
+    function addUser(address _user) external{
+        user[totalUsers].push(_user);
+        totalUsers++;
+    }
+
+    function returnUsers() external view returns(address[] memory) {
+        return(users);
+    }
     function sendMoney()external payable{}
 
     function withdraw(uint256 _amount) external{

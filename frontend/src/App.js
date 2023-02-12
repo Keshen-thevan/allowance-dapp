@@ -38,6 +38,8 @@ function App() {
   const [isStake, setIsStake] = useState(true)
   // the returned value from the smart contract
   const [SMstakeEnd, setSMstakeEnd] = useState(0)
+  // stores the amount of tokens the user owns
+  const [tokensOwned, setTokensOwned] = useState(0)
 
 
   const getProviderOrSigner = async (needSigner = false) => {
@@ -97,6 +99,7 @@ function App() {
       connectWallet();
     }
       getUserStakeData()
+      getTokensOwned()
   }, [walletConnected, contractBalance]);
 
   useEffect(() =>{
@@ -193,12 +196,7 @@ function App() {
     const provider = await getProviderOrSigner()
     const walletContract = new Contract(contract_address_two, contract_abi_two, provider)
     const tx = await walletContract.getStakeUserData(user);
-    console.log(tx.isStake)
-    console.log(tx.stakeAmount.toNumber() + ' stakeAmount')
-    console.log(tx.stakeStartDate.toNumber() + ' stakeStartDate')
-    console.log(tx.stakeEndDate.toNumber() + ' stakeEndDate')
-    console.log(tx.stakeTotal.toNumber() + ' stake total')
-
+ 
     setIsStake(tx.isStake)
     setStakeOutput(tx.stakeAmount.toNumber())
     setStakeResult(tx.stakeTotal.toNumber())
@@ -248,24 +246,28 @@ function App() {
     // timeleft = the var from the smart contract - now
     var timeleft = SMstakeEnd - now
     if(isStake && timeleft > 1){
+      try{
+        // calc the days, hours, mins and secs from the milliseconds
+        var days = Math.floor(timeleft / (1000 * 60 * 60 * 24));
+        var hours = Math.floor((timeleft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        var minutes = Math.floor((timeleft % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((timeleft % (1000 * 60)) / 1000);
+  
+        //outputs the countdown variable to countdown p tag
+        // i need to run this only if the stake section is open 
+        document.getElementById("countdown").innerHTML = days + "d " 
+        + hours + "h " 
+        + minutes + "m "
+        + seconds + "s" 
 
-      // calc the days, hours, mins and secs from the milliseconds
-      var days = Math.floor(timeleft / (1000 * 60 * 60 * 24));
-      var hours = Math.floor((timeleft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      var minutes = Math.floor((timeleft % (1000 * 60 * 60)) / (1000 * 60));
-      var seconds = Math.floor((timeleft % (1000 * 60)) / 1000);
-
-      //outputs the countdown variable to countdown p tag
-      document.getElementById("countdown").innerHTML = days + "d " 
-      + hours + "h " 
-      + minutes + "m "
-      + seconds + "s" 
+      }catch(err){console.log(err)}
       // if timeleft equals zero, will set isStake to false so the user can return to stake screen
-      if(timeleft === 0){
-        setIsStake(false)
-        console.log('the time for the stake is 0')
-      }else{return}
+
     }
+    else if(timeleft === 0){
+      setIsStake(false)
+      console.log('the time for the stake is 0')
+    }else{return}
     
   }, 1000)
     
@@ -288,15 +290,15 @@ function App() {
 
   }
   // this calculates the percent return
-  var interest = 0.01;
+  var interest = 1
   if (length === '186'){
-    interest = 0.7;
+    interest = 70
   }else if(length === '30'){
-    interest = 0.1;
+    interest = 10
   }else if(length ==='7'){
-    interest = 0.01
+    interest = 1
   }else(radios[0].checked = true)
-  const stakeReturn = (number * interest).toFixed(1);
+  const stakeReturn = (number * interest).toFixed(0);
   
   // this gets the number from the range input and set it to state
   setStakeOutput(number)
@@ -304,6 +306,41 @@ function App() {
   setStakeResult(stakeReturn)
   setDuration(length)
  }
+
+ const mint = async() =>{
+  const mintAmount = document.getElementById('mintInput').value;
+  const signer = await getProviderOrSigner(true)
+  const walletContract = new Contract(contract_address_two, contract_abi_two, signer)
+  const tx = await walletContract.mint(mintAmount)
+  walletContract.events.mintEvent({
+    fromBlock: 0 //This should be when you deployed your contract, ideally keep track of this number as you read new blocks
+    }, function(error, event){ console.log(event); })
+    .on("connected", function(subscriptionId){
+        console.log(subscriptionId);
+    })
+    .on('data', function(event){
+        console.log(event); // same results as the optional callback above
+    })
+    .on('error', function(error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
+        console.log(error)
+    });
+  tx.wait()
+  alert(mintAmount + " MINT COMPLETE")
+  getTokensOwned()
+ }
+
+ const getTokensOwned = async() =>{
+  const provider = await getProviderOrSigner()
+  const walletContract = new Contract(contract_address_two, contract_abi_two, provider)
+  const tx = await walletContract.getTokensOwned(user)
+  setTokensOwned(tx.toNumber())
+  alert(tx.toNumber() + ' retrieved tokens')
+  console.log(tx.toNumber())
+ }
+
+
+
+ 
 
 
   
@@ -489,6 +526,18 @@ function App() {
               </div>}
               
             </div>}/>
+
+            <Route path = 'mint' element={
+              <div className = 'container owner'>
+                <h3>Mint</h3>
+                <label htmlFor="MintInput">Set Amount: </label>
+                <input className ='txtbox' type="number" id="mintInput" name="mintInput"/>
+                <p>tokens owned: {tokensOwned}</p>
+            <div>
+                <button onClick={mint} className="btn owner-btn">Mint</button>
+            </div>
+              </div>
+            }/>
           </Routes>
         </div>
         </BrowserRouter>
