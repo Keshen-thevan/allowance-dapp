@@ -234,3 +234,28 @@ input[type=range]:hover::-webkit-slider-runnable-track {
   padding-right: 40px;
 }
 
+
+
+#loadRequests {
+  margin-left: 0px;
+  padding: 30px 0px 30px 10px;
+  background-color: rgb(138, 39, 39);
+  color: black;
+  width: 45rem;
+  margin-top: 10px;
+  gap: 10px;
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+
+#cheese{
+  background-color: #c09f0c;
+}
+
+#outsideDiv{
+  background-color: green;
+  display: inline-flex;
+  gap: 10px;
+}

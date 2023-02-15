@@ -1,6 +1,182 @@
 export const contract_ADDRESS = '0x04145BeB85Fd6C7b30faFb49BB8974318e5948E7';
 export const contract_address_two = '0x20dfF38127Fb5888E9A7562F9C4ef67Ce8Caa868'
+export const contract_address_three = "0x7D2879230002BDB2192fD8d38FFBb47076B81C64"
 
+export const contract_abi_three = [
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_index",
+				"type": "uint256"
+			}
+		],
+		"name": "removeLoan",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_amount",
+				"type": "uint256"
+			}
+		],
+		"name": "requestLoan",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "sendMoney",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"stateMutability": "payable",
+		"type": "fallback"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_nr",
+				"type": "uint256"
+			}
+		],
+		"name": "verfiyLoan",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "withdrawLoan",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"stateMutability": "payable",
+		"type": "receive"
+	},
+	{
+		"inputs": [],
+		"name": "getBalance",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getLoanRequests",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "requestNr",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "_address",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_requestAmount",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_interestAmount",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "_verified",
+						"type": "string"
+					},
+					{
+						"internalType": "bool",
+						"name": "_fundsWithdrawn",
+						"type": "bool"
+					},
+					{
+						"internalType": "bool",
+						"name": "_fundsReturned",
+						"type": "bool"
+					}
+				],
+				"internalType": "struct Loan.LoanRequest[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "loanRequests",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "requestNr",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "_address",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_requestAmount",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_interestAmount",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "_verified",
+				"type": "string"
+			},
+			{
+				"internalType": "bool",
+				"name": "_fundsWithdrawn",
+				"type": "bool"
+			},
+			{
+				"internalType": "bool",
+				"name": "_fundsReturned",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+]
 export const contract_abi_two = [
 	{
 		"inputs": [],
@@ -432,7 +608,6 @@ export const contract_abi_two = [
 		"type": "function"
 	}
 ]
-
 export const contract_ABI = [
 	{
 		"anonymous": false,

@@ -1,4 +1,5 @@
 import './App.css';
+import React from 'react'
 import Swal from 'sweetalert2'
 import Web3Modal from 'web3modal'
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
@@ -7,7 +8,10 @@ import OwnerNavbar from './ownerNavbar'
 import 'react-range-slider-input/dist/style.css';
 import { providers, Contract, utils } from "ethers"
 import { useRef, useEffect, useState } from "react"
-import { contract_ABI, contract_ADDRESS, contract_address_two, contract_abi_two } from '../src/constants'
+import { contract_ABI, contract_ADDRESS, 
+        contract_address_two, contract_abi_two,
+        contract_address_three, contract_abi_three
+       } from '../src/constants'
 
 
 function App() {
@@ -206,7 +210,6 @@ function App() {
 
   }
   
-
 // the functions that runs onClick in stake and starts the countdown in the smart contract
 // sets the userStake data
   const SMstartCountdown = async() =>{
@@ -312,19 +315,8 @@ function App() {
   const signer = await getProviderOrSigner(true)
   const walletContract = new Contract(contract_address_two, contract_abi_two, signer)
   const tx = await walletContract.mint(mintAmount)
-  walletContract.events.mintEvent({
-    fromBlock: 0 //This should be when you deployed your contract, ideally keep track of this number as you read new blocks
-    }, function(error, event){ console.log(event); })
-    .on("connected", function(subscriptionId){
-        console.log(subscriptionId);
-    })
-    .on('data', function(event){
-        console.log(event); // same results as the optional callback above
-    })
-    .on('error', function(error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
-        console.log(error)
-    });
   tx.wait()
+  console.log(tx)
   alert(mintAmount + " MINT COMPLETE")
   getTokensOwned()
  }
@@ -334,12 +326,65 @@ function App() {
   const walletContract = new Contract(contract_address_two, contract_abi_two, provider)
   const tx = await walletContract.getTokensOwned(user)
   setTokensOwned(tx.toNumber())
-  alert(tx.toNumber() + ' retrieved tokens')
-  console.log(tx.toNumber())
  }
 
+ const loanRequest = async() =>{
+  const signer = await getProviderOrSigner(true)
+  const loanContract = new Contract(contract_address_three, contract_abi_three, signer)
+  // need to get input variable for request loan. currently only pushes 70
+  const loanInput = document.getElementById('loanInput').value
+  const tx = await loanContract.requestLoan(loanInput)
+  console.log(tx)
+  alert('loan has been requested')
+ }
 
+ const loanFunction = (tx) =>{
+  console.log('| request nr: ' + tx[0].toNumber()  + " | address: " + tx[1] + " | request Amount: " + tx[2])
 
+ }
+
+ const verifyLoanRequests = async() => {
+  const provider = await getProviderOrSigner()
+  const loanContract = new Contract(contract_address_three, contract_abi_three, provider)
+  const tx = await loanContract.verifyLoan(0)
+  console.log('aaaaaaaaah')
+ }
+
+ const viewLoanRequest = async() =>{
+  const provider = await getProviderOrSigner()
+  const loanContract = new Contract(contract_address_three, contract_abi_three, provider)
+  const tx = await loanContract.getLoanRequests()
+  const loanArray = tx;
+
+  
+
+loanArray.forEach(loan => {
+  // create a single div for each loan then push each item to the div
+  const outsideDiv = document.createElement('div')
+  outsideDiv.id = 'outsideDiv'
+  document.getElementById('loadRequests').appendChild(outsideDiv)
+
+  loan.forEach(item =>{
+  if(item === 'unverified'){
+    console.log('cheese')
+    const verifyLoan = verifyLoanRequests
+    item = `<button onClick = {verifyLoan} className="btn owner-btn">verify</button>`
+
+  }else if(item === 'verified'){
+    item = 'verified'
+  }
+
+    const div = document.createElement("div");
+    div.id = 'cheese'
+    div.innerHTML = item;
+    const requests = document.getElementById('loadRequests')
+    outsideDiv.appendChild(div);
+  })
+   
+
+  })
+
+}
  
 
 
@@ -462,13 +507,24 @@ function App() {
                </div>
              </div>
             }/>
-            <Route path='userWithdraw' element = {
+            <Route path='userLoan' element = {
               <div className="withdraw container owner">
-              <h3>Withdraw</h3>
+              <h3>Request Loan</h3>
                 <label htmlFor="name">Amount: </label>
-                <input className ='txtbox' type="number" id="amountInput" name="name" />
+                <input className ='txtbox' type="number" id="loanInput" name="name" />
               <div>
-                <button onClick={withdraw} className="btn owner-btn">withdraw</button>
+                <button onClick={loanRequest} className="btn owner-btn">Request</button>
+              </div>
+              <div>
+                <button onClick={viewLoanRequest} className="btn owner-btn">View requests</button>
+                {/* <button onClick={} className="btn owner-btn">create</button> */}
+              </div>
+              
+              <div className='viewRequests'>
+                <h3>Requests</h3>
+                <div id = 'loadRequests'>
+                  <div id='loanItems'></div>
+                </div>
               </div>
             </div>
             }/>
@@ -528,14 +584,14 @@ function App() {
             </div>}/>
 
             <Route path = 'mint' element={
-              <div className = 'container owner'>
-                <h3>Mint</h3>
-                <label htmlFor="MintInput">Set Amount: </label>
-                <input className ='txtbox' type="number" id="mintInput" name="mintInput"/>
-                <p>tokens owned: {tokensOwned}</p>
-            <div>
-                <button onClick={mint} className="btn owner-btn">Mint</button>
-            </div>
+                  <div className = 'container owner'>
+                  <h3>Mint</h3>
+                  <label htmlFor="MintInput">Set Amount: </label>
+                  <input className ='txtbox' type="number" id="mintInput" name="mintInput"/>
+                  <p>tokens owned: {tokensOwned}</p>
+                  <div>
+                      <button onClick={mint} className="btn owner-btn">Mint</button>
+                  </div>
               </div>
             }/>
           </Routes>

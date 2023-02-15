@@ -5,7 +5,7 @@ function navbar(){
         <>
         <nav className='sidenav'>
           <NavLink to='/'>Dashboard</NavLink>
-          <NavLink to='/userWithdraw'>Withdraw</NavLink>
+          <NavLink to='/userLoan'>Request Loan</NavLink>
           <NavLink to='/userSendMoney'>Send Money</NavLink>
           <NavLink to='/stake'>Stake</NavLink>
           <NavLink to='/mint'>Mint</NavLink>
