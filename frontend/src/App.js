@@ -338,15 +338,10 @@ function App() {
   alert('loan has been requested')
  }
 
- const loanFunction = (tx) =>{
-  console.log('| request nr: ' + tx[0].toNumber()  + " | address: " + tx[1] + " | request Amount: " + tx[2])
-
- }
-
  const verifyLoanRequests = async() => {
-  const provider = await getProviderOrSigner()
-  const loanContract = new Contract(contract_address_three, contract_abi_three, provider)
-  const tx = await loanContract.verifyLoan(0)
+  // const provider = await getProviderOrSigner()
+  // const loanContract = new Contract(contract_address_three, contract_abi_three, provider)
+  // const tx = await loanContract.verifyLoan(0)
   console.log('aaaaaaaaah')
  }
 
@@ -365,8 +360,12 @@ function App() {
 
     loan.forEach(item =>{
       if(item === 'unverified'){
-        const verifyLoan = verifyLoanRequests
-        item = `<button onClick = {verifyLoan} className="btn owner-btn">verify</button>`
+        // item = '<button onClick = {verifyLoan} className="btn owner-btn">verify</button>'
+        const _button = document.createElement("button")
+        _button.id = "pen"
+        _button.innerHTML = 'click me';
+        _button.onclick = verifyLoanRequests
+        outsideDiv.append(_button)
 
       }else if(item === 'verified'){
         item = 'verified'
@@ -512,7 +511,6 @@ function App() {
               </div>
               <div>
                 <button onClick={viewLoanRequest} className="btn owner-btn">View requests</button>
-                {/* <button onClick={} className="btn owner-btn">create</button> */}
               </div>
               
               <div className='viewRequests'>
@@ -577,7 +575,6 @@ function App() {
               </div>}
               
             </div>}/>
-
             <Route path = 'mint' element={
                   <div className = 'container owner'>
                   <h3>Mint</h3>

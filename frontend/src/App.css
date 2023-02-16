@@ -50,14 +50,18 @@ body{
 }
 
 .accountBalance{
-  color: white;
+  color: rgb(0, 0, 0);
   font-size: 20px;
 }
 
 .userOutput{
   margin-top: 50px;
   font-size: 20px;
-  color:yellow;
+  color:var(--primary);
+}
+
+.main{
+  background-color: #f1f1f1;
 }
 
 .owner{
@@ -253,6 +257,8 @@ input[type=range]:hover::-webkit-slider-runnable-track {
 #cheese{
   background-color: #c2c2c2;
   border-radius: 15px;
+  justify-content: center;
+  align-content: center;
 }
 
 #outsideDiv{
@@ -260,4 +266,17 @@ input[type=range]:hover::-webkit-slider-runnable-track {
   display: inline-flex;
   gap: 10px;
   border-radius: 15px;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+#pen{
+  background-color: green;
+  width: 40px;
+  height: 30px;
+}
+
+#pen:hover{
+  cursor: pointer;
+
 }
