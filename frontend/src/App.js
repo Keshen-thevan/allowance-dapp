@@ -355,34 +355,29 @@ function App() {
   const loanContract = new Contract(contract_address_three, contract_abi_three, provider)
   const tx = await loanContract.getLoanRequests()
   const loanArray = tx;
+  document.getElementById('loadRequests').innerHTML = " "
 
-  
+  loanArray.forEach(loan => {
+    // create a single div for each loan then push each item to the div
+    const outsideDiv = document.createElement('div')
+    outsideDiv.id = 'outsideDiv'
+    document.getElementById('loadRequests').appendChild(outsideDiv)
 
-loanArray.forEach(loan => {
-  // create a single div for each loan then push each item to the div
-  const outsideDiv = document.createElement('div')
-  outsideDiv.id = 'outsideDiv'
-  document.getElementById('loadRequests').appendChild(outsideDiv)
+    loan.forEach(item =>{
+      if(item === 'unverified'){
+        const verifyLoan = verifyLoanRequests
+        item = `<button onClick = {verifyLoan} className="btn owner-btn">verify</button>`
 
-  loan.forEach(item =>{
-  if(item === 'unverified'){
-    console.log('cheese')
-    const verifyLoan = verifyLoanRequests
-    item = `<button onClick = {verifyLoan} className="btn owner-btn">verify</button>`
+      }else if(item === 'verified'){
+        item = 'verified'
+      }
 
-  }else if(item === 'verified'){
-    item = 'verified'
-  }
-
-    const div = document.createElement("div");
-    div.id = 'cheese'
-    div.innerHTML = item;
-    const requests = document.getElementById('loadRequests')
-    outsideDiv.appendChild(div);
-  })
-   
-
-  })
+        const div = document.createElement("div");
+        div.id = 'cheese'
+        div.innerHTML = item;
+        outsideDiv.appendChild(div);
+      })
+    })
 
 }
  
