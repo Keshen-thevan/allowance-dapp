@@ -1,6 +1,6 @@
 export const contract_ADDRESS = '0x04145BeB85Fd6C7b30faFb49BB8974318e5948E7';
 export const contract_address_two = '0x20dfF38127Fb5888E9A7562F9C4ef67Ce8Caa868'
-export const contract_address_three = "0x7D2879230002BDB2192fD8d38FFBb47076B81C64"
+export const contract_address_three = "0x3Db97217baF03d7BFbA55397f4fe3453aC63aeE8"
 
 export const contract_abi_three = [
 	{
@@ -136,6 +136,55 @@ export const contract_abi_three = [
 			}
 		],
 		"name": "loanRequests",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "requestNr",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "_address",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_requestAmount",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_interestAmount",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "_verified",
+				"type": "string"
+			},
+			{
+				"internalType": "bool",
+				"name": "_fundsWithdrawn",
+				"type": "bool"
+			},
+			{
+				"internalType": "bool",
+				"name": "_fundsReturned",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "loans",
 		"outputs": [
 			{
 				"internalType": "uint256",

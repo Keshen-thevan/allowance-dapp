@@ -339,9 +339,9 @@ function App() {
  }
 
  const verifyLoanRequests = async() => {
-  // const provider = await getProviderOrSigner()
-  // const loanContract = new Contract(contract_address_three, contract_abi_three, provider)
-  // const tx = await loanContract.verifyLoan(0)
+  const signer = await getProviderOrSigner(true)
+  const loanContract = new Contract(contract_address_three, contract_abi_three, signer)
+  const tx = await loanContract.verfiyLoan(0)
   console.log('aaaaaaaaah')
  }
 
@@ -349,6 +349,7 @@ function App() {
   const provider = await getProviderOrSigner()
   const loanContract = new Contract(contract_address_three, contract_abi_three, provider)
   const tx = await loanContract.getLoanRequests()
+  console.log(tx)
   const loanArray = tx;
   document.getElementById('loadRequests').innerHTML = " "
 
@@ -363,12 +364,12 @@ function App() {
         // item = '<button onClick = {verifyLoan} className="btn owner-btn">verify</button>'
         const _button = document.createElement("button")
         _button.id = "pen"
-        _button.innerHTML = 'click me';
+        _button.innerHTML = 'verify';
         _button.onclick = verifyLoanRequests
         outsideDiv.append(_button)
 
-      }else if(item === 'verified'){
-        item = 'verified'
+      }else if( item === 'verified'){
+        console.log('verified')
       }
 
         const div = document.createElement("div");
@@ -502,8 +503,9 @@ function App() {
              </div>
             }/>
             <Route path='userLoan' element = {
+              <>
               <div className="withdraw container owner">
-              <h3>Request Loan</h3>
+              <h3 >Request Loan</h3>
                 <label htmlFor="name">Amount: </label>
                 <input className ='txtbox' type="number" id="loanInput" name="name" />
               <div>
@@ -513,13 +515,15 @@ function App() {
                 <button onClick={viewLoanRequest} className="btn owner-btn">View requests</button>
               </div>
               
-              <div className='viewRequests'>
-                <h3>Requests</h3>
-                <div id = 'loadRequests'>
-                  <div id='loanItems'></div>
-                </div>
-              </div>
+              
             </div>
+            <div className='viewRequests'>
+            <h3 id='requestsHeader'>Requests</h3>
+            <div id = 'loadRequests'>
+              <div id='loanItems'></div>
+            </div>
+          </div>
+          </>
             }/>
             <Route path='userSendMoney' element = {    <div className="container owner">
                 <h3>Send Money</h3>
