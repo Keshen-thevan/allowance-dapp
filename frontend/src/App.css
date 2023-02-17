@@ -254,14 +254,16 @@ input[type=range]:hover::-webkit-slider-runnable-track {
   display: flex;
   flex-direction: column;
   font-family:'Noto Sans', sans-serif;
+  text-align: center;
 }
 
 
-#cheese{
+#loan{
   background-color: #c2c2c2;
   border-radius: 15px;
+  text-align: center;
+  height: 30px;
   justify-content: center;
-  align-content: center;
 }
 
 #outsideDiv{
@@ -269,17 +271,20 @@ input[type=range]:hover::-webkit-slider-runnable-track {
   display: inline-flex;
   gap: 10px;
   border-radius: 15px;
-  justify-content: space-evenly;
-  align-items: center;
+  justify-content:space-evenly;
+  align-content: space-around;
+  justify-self: center;
 }
 
-#pen{
+#verifyBtn{
   background-color: green;
+  border: none;
   width: 40px;
   height: 30px;
+  border-radius: 5px;
 }
 
-#pen:hover{
+#verifyBtn:hover{
   cursor: pointer;
 
 }

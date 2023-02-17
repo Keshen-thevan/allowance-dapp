@@ -334,16 +334,19 @@ function App() {
   // need to get input variable for request loan. currently only pushes 70
   const loanInput = document.getElementById('loanInput').value
   const tx = await loanContract.requestLoan(loanInput)
-  console.log(tx)
+  tx.wait()
   alert('loan has been requested')
  }
 
  const verifyLoanRequests = async() => {
   const signer = await getProviderOrSigner(true)
   const loanContract = new Contract(contract_address_three, contract_abi_three, signer)
-  const tx = await loanContract.verfiyLoan(0)
-  console.log('aaaaaaaaah')
+  var _loanId = parseInt(loanId)
+  const tx = await loanContract.verfiyLoan(_loanId)
  }
+
+ const [cheese, setCheese] = useState()
+ var loanId;
 
  const viewLoanRequest = async() =>{
   const provider = await getProviderOrSigner()
@@ -359,13 +362,19 @@ function App() {
     outsideDiv.id = 'outsideDiv'
     document.getElementById('loadRequests').appendChild(outsideDiv)
 
+    //loops through each element in each smaller array
     loan.forEach(item =>{
+      //if the item if unverifed, it creates a button to run the verify fuction
       if(item === 'unverified'){
-        // item = '<button onClick = {verifyLoan} className="btn owner-btn">verify</button>'
         const _button = document.createElement("button")
-        _button.id = "pen"
+        _button.id = "verifyBtn"
         _button.innerHTML = 'verify';
         _button.onclick = verifyLoanRequests
+        _button.onmouseover = function green(){
+          setCheese(loan[0])
+          loanId = [loan[0]]
+          console.log('this is loan: ' + loan[0] + " " + loanId)
+        }
         outsideDiv.append(_button)
 
       }else if( item === 'verified'){
@@ -373,11 +382,14 @@ function App() {
       }
 
         const div = document.createElement("div");
-        div.id = 'cheese'
+        div.id = 'loan'
         div.innerHTML = item;
         outsideDiv.appendChild(div);
       })
+      
     })
+
+    
 
 }
  
