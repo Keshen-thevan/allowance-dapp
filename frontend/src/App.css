@@ -55,7 +55,7 @@ body{
 }
 
 .userOutput{
-  margin-top: 50px;
+  margin-top: 20px;
   font-size: 20px;
   color:var(--primary);
 }
@@ -67,7 +67,7 @@ body{
 .owner{
   width: calc(90vw -300px);
   font-family:'Noto Sans', sans-serif;
-  color: var(--font-color);
+  color: black;
   margin-left: 320px;
   margin-top: 20px;
 }
@@ -238,7 +238,7 @@ input[type=range]:hover::-webkit-slider-runnable-track {
   padding-right: 40px;
 }
 
-
+/*  -- Loan styles --  */
 #requestsHeader{
   font-family:'Noto Sans', sans-serif;
 }

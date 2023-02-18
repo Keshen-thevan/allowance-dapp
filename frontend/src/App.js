@@ -502,6 +502,7 @@ function App() {
      
                <div className="accountBalance ">
                  <p>accountBalance: {accountBalance} ETH</p>
+                 <p>tokens owned: {tokensOwned}</p>
                </div>
      
                {userLimit ? <div>userLimit: {userLimit} wei</div> : <div></div>}
@@ -596,7 +597,6 @@ function App() {
                   <h3>Mint</h3>
                   <label htmlFor="MintInput">Set Amount: </label>
                   <input className ='txtbox' type="number" id="mintInput" name="mintInput"/>
-                  <p>tokens owned: {tokensOwned}</p>
                   <div>
                       <button onClick={mint} className="btn owner-btn">Mint</button>
                   </div>
