@@ -39,11 +39,12 @@ function App() {
   const [stakeResult, setStakeResult] = useState(50)
   const [duration, setDuration] = useState(0)
   // bool holding if there is currently a stake
-  const [isStake, setIsStake] = useState(true)
+  const [isStake, setIsStake] = useState(false)
   // the returned value from the smart contract
   const [SMstakeEnd, setSMstakeEnd] = useState(0)
   // stores the amount of tokens the user owns
   const [tokensOwned, setTokensOwned] = useState(0)
+  const [loanVerified, setLoanVerified] = useState(false)
 
 
   const getProviderOrSigner = async (needSigner = false) => {
@@ -342,18 +343,25 @@ function App() {
   const signer = await getProviderOrSigner(true)
   const loanContract = new Contract(contract_address_three, contract_abi_three, signer)
   var _loanId = parseInt(loanId)
-  const tx = await loanContract.verfiyLoan(_loanId)
+  const tx = await loanContract.verifyLoan(_loanId)
  }
+ const deleteLoanRequest = async() =>{
+  const signer = await getProviderOrSigner(true)
+  const loanContract = new Contract(contract_address_three, contract_abi_three, signer)
+  var _loanId = parseInt(loanId)
+  const tx = await loanContract.removeLoan(_loanId)
+  tx.wait()
+  alert('loan has been deleted')
 
- const [cheese, setCheese] = useState()
+}
+
  var loanId;
-
  const viewLoanRequest = async() =>{
   const provider = await getProviderOrSigner()
   const loanContract = new Contract(contract_address_three, contract_abi_three, provider)
   const tx = await loanContract.getLoanRequests()
-  console.log(tx)
-  const loanArray = tx;
+  const arr = tx;
+  const loanArray = arr;
   document.getElementById('loadRequests').innerHTML = " "
 
   loanArray.forEach(loan => {
@@ -365,19 +373,25 @@ function App() {
     //loops through each element in each smaller array
     loan.forEach(item =>{
       //if the item if unverifed, it creates a button to run the verify fuction
-      if(item === 'unverified'){
-        const _button = document.createElement("button")
-        _button.id = "verifyBtn"
-        _button.innerHTML = 'verify';
-        _button.onclick = verifyLoanRequests
-        _button.onmouseover = function green(){
-          setCheese(loan[0])
+      if(item === 'pending'){
+        const _approveBtn = document.createElement("button")
+        const _denyBtn = document.createElement('button')
+        _approveBtn.id = "verifyBtn"
+        _denyBtn.id = 'denyBtn'
+        _approveBtn.innerHTML = 'verify'
+        _denyBtn.innerHTML = 'deny'
+        _approveBtn.onclick = verifyLoanRequests
+        _denyBtn.onclick = deleteLoanRequest
+        _approveBtn.onmouseover = function green(){
           loanId = [loan[0]]
-          console.log('this is loan: ' + loan[0] + " " + loanId)
         }
-        outsideDiv.append(_button)
+        _denyBtn.onmouseover = function red(){
+          loanId = [loan[0]]
+        }
+        outsideDiv.insertAdjacentElement('afterbegin', _denyBtn)
+        outsideDiv.insertAdjacentElement('afterbegin',_approveBtn)
 
-      }else if( item === 'verified'){
+      }else if( item === 'approved'){
         console.log('verified')
       }
 
@@ -392,11 +406,9 @@ function App() {
     
 
 }
+
+
  
-
-
-  
-
 
 
 
@@ -526,6 +538,9 @@ function App() {
               </div>
               <div>
                 <button onClick={viewLoanRequest} className="btn owner-btn">View requests</button>
+              </div>
+              <div>
+                <button onClick={deleteLoanRequest} className="btn owner-btn">Delete requests</button>
               </div>
               
               
