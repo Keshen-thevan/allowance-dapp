@@ -46,6 +46,8 @@ function App() {
   const [tokensOwned, setTokensOwned] = useState(0)
   const [loanVerified, setLoanVerified] = useState(false)
 
+  const [loanStage, setLoanStage] = useState()
+
 
   const getProviderOrSigner = async (needSigner = false) => {
     const provider = await web3ModalRef.current.connect();
@@ -249,21 +251,24 @@ function App() {
     var now = new Date().getTime();
     // timeleft = the var from the smart contract - now
     var timeleft = SMstakeEnd - now
+    const countdownDiv = document.getElementById('countdown')
     if(isStake && timeleft > 1){
       try{
         // calc the days, hours, mins and secs from the milliseconds
+        if(countdownDiv === null){
+          return
+        }
+        else{
         var days = Math.floor(timeleft / (1000 * 60 * 60 * 24));
         var hours = Math.floor((timeleft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         var minutes = Math.floor((timeleft % (1000 * 60 * 60)) / (1000 * 60));
         var seconds = Math.floor((timeleft % (1000 * 60)) / 1000);
-  
-        //outputs the countdown variable to countdown p tag
-        // i need to run this only if the stake section is open 
+        
         document.getElementById("countdown").innerHTML = days + "d " 
         + hours + "h " 
         + minutes + "m "
         + seconds + "s" 
-
+        }
       }catch(err){console.log(err)}
       // if timeleft equals zero, will set isStake to false so the user can return to stake screen
 
@@ -391,8 +396,10 @@ function App() {
         outsideDiv.insertAdjacentElement('afterbegin', _denyBtn)
         outsideDiv.insertAdjacentElement('afterbegin',_approveBtn)
 
+        setLoanStage('pending')
       }else if( item === 'approved'){
         console.log('verified')
+        setLoanStage('approved')
       }
 
         const div = document.createElement("div");
@@ -531,8 +538,12 @@ function App() {
               <>
               <div className="withdraw container owner">
               <h3 >Request Loan</h3>
+              {loanStage !== 'pending' ? <div><h3>pending</h3></div> : <div>
                 <label htmlFor="name">Amount: </label>
                 <input className ='txtbox' type="number" id="loanInput" name="name" />
+              </div>
+              }
+              
               <div>
                 <button onClick={loanRequest} className="btn owner-btn">Request</button>
               </div>
