@@ -1,6 +1,6 @@
 export const contract_ADDRESS = '0x04145BeB85Fd6C7b30faFb49BB8974318e5948E7';
 export const contract_address_two = '0x20dfF38127Fb5888E9A7562F9C4ef67Ce8Caa868'
-export const contract_address_three = "0xfF24C5a7674129a027aDdae040a6b85cE4aDd67F"
+export const contract_address_three = "0x96BDE494D935676E464cf5b9aA9e1a7aDe8ea353"
 
 export const contract_abi_three = [
 	{

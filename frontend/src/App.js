@@ -68,7 +68,7 @@ function App() {
     setAccountBalance(userBalance)
 
     const { chainId } = await web3Provider.getNetwork();
-    if (chainId !== 80001 ) {
+    if (chainId !== 5 ) {
       window.alert("Change the network to Mumbai testnet");
       throw new Error("Change network to Mumbai testnet");
     }
@@ -377,6 +377,9 @@ function App() {
 
     //loops through each element in each smaller array
     loan.forEach(item =>{
+      if (item.toLowerCase === user.toLowerCase){
+        console.log('the user has a loan request')
+      }
       //if the item if unverifed, it creates a button to run the verify fuction
       if(item === 'pending'){
         const _approveBtn = document.createElement("button")
@@ -399,9 +402,7 @@ function App() {
         setLoanStage('pending')
       }else if( item === 'approved'){
         console.log('verified')
-        setLoanStage('approved')
       }
-
         const div = document.createElement("div");
         div.id = 'loan'
         div.innerHTML = item;
@@ -411,7 +412,7 @@ function App() {
     })
 
     
-
+console.log(user)
 }
 
 
@@ -538,15 +539,20 @@ function App() {
               <>
               <div className="withdraw container owner">
               <h3 >Request Loan</h3>
-              {loanStage !== 'pending' ? <div><h3>pending</h3></div> : <div>
+              {loanStage == 'pending' ? 
+              <div>
+                <h3>pending</h3>
+                
+              </div> : 
+              <div>
                 <label htmlFor="name">Amount: </label>
                 <input className ='txtbox' type="number" id="loanInput" name="name" />
+                <div>
+                  <button onClick={loanRequest} className="btn owner-btn">Request</button>
+                </div>
               </div>
               }
               
-              <div>
-                <button onClick={loanRequest} className="btn owner-btn">Request</button>
-              </div>
               <div>
                 <button onClick={viewLoanRequest} className="btn owner-btn">View requests</button>
               </div>
